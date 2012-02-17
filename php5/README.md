@@ -20,7 +20,7 @@ Open [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.
 Step 2. Test your Billin API communication
 --------------------------------------------------------------------------------
 
-Our demo server is OK for testing. Please setup the [config.ph5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) file for use on Billin demo. 
+Our demo server is OK for testing. Please setup the [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) file for use on Billin demo. 
 
 Relevant server configuration parameters in [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) (besides `$user`, `$api_key` and `$password`) are:
 
