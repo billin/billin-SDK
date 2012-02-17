@@ -144,7 +144,7 @@ version is sufficient.
 - - -
     function BillinSession->elt($n, $list = Null) 
 Returns element `$n` of `$list`. Lists are 0-indexed. If `$list` is not
-specified it defaults to the last API call result (ref(-1)).
+specified it defaults to the last API call result - `ref(-1)`.
 
 Example - get the first subscription created in the system:
 
@@ -290,7 +290,7 @@ Returns all `$customer` balance information - invoices and payments
 - - -
     function get_payu_pending_payment($customer = Null) 
 
-Returns pending payment information for PayU Payment provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayU. The important fields of returned object are id and amount. 
+Returns pending payment information for PayU Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayU. The important fields of returned object are id and amount. 
 
 ### Invoice images
 
