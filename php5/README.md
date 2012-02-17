@@ -1,9 +1,7 @@
 This is a draft of a manual for Billin PHP5 SDK - version 0.1
 ================================================================================
 
-To get you started quickly have a look at a simple example contained in the
-test-billin.php5 file. Each SDK method used in there is commented to let you
-know what is happening in every step.
+To get you started quickly have a look at a simple example contained in the [test-billin.php5](https://github.com/billin/billin-SDK/blob/master/php5/test-billin.php5) file. Each SDK method used in there is commented to let you know what is happening in every step.
 
 Step 1. Configure your Billin API
 --------------------------------------------------------------------------------
@@ -11,7 +9,7 @@ Step 1. Configure your Billin API
 Make sure you are using PHP5 with the cURL extension installed. When cURL is not
 present, the SDK will scream about it.
 
-Open [config.php5](config.php5) in your favourite text editor and set following variables:
+Open [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) in your favourite text editor and set following variables:
 
 * `$user` - your Billin application user name
 * `$password` - your Billin application user password - deprecated in favor of `$api_key`
@@ -22,10 +20,9 @@ Open [config.php5](config.php5) in your favourite text editor and set following 
 Step 2. Test your Billin API communication
 --------------------------------------------------------------------------------
 
-Our demo server is OK for testing. Please setup the config.ph5 file for use on Billin demo. 
+Our demo server is OK for testing. Please setup the [config.ph5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) file for use on Billin demo. 
 
-Relevant server configuration parameters in config.php5 (besides `$user`,
-`$api_key` and `$password`) are:
+Relevant server configuration parameters in [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) (besides `$user`, `$api_key` and `$password`) are:
 
 * `$server` - eg 'http://localhost:8080' - Protocol, server and port number for the Billin API server
 * `$prefix` - eg '/dev/API/' - Your individual, private API prefix
@@ -116,7 +113,7 @@ Function Reference
 Creates a new session and invokes login on first API call if the API
 user is not logged in already.
 
-To login following variables set in [config.php5](config.php5) are used: `$user`, `$password` or `$api_key`. The preferred way to login is to use `$api_key` instead of the `$password`. It allows to login as the user and change it's password without blocking application access.
+To login following variables set in [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) are used: `$user`, `$password` or `$api_key`. The preferred way to login is to use `$api_key` instead of the `$password`. It allows to login as the user and change it's password without blocking application access.
 
 ### Transactions
 
