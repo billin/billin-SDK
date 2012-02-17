@@ -317,4 +317,4 @@ Function Reference
                                                $output_format=keyword(pdf),
                                                $image_type=keyword(original))
 
-# vim:set sw=4 ts=4 expandtab softtabstop=4 ai nowrap:
+vim:set sw=4 ts=4 expandtab softtabstop=4 ai nowrap:
