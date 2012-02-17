@@ -108,7 +108,7 @@ Function Reference
 
 ### Session Object
 
-    new BillinSession()
+    new BillinSession();
 
 Creates a new session and invokes login on first API call if the API
 user is not logged in already.
@@ -145,14 +145,14 @@ specified it defaults to the last API call result - `ref(-1)`.
 
 Example - get the first subscription created in the system:
 
-	$sess->list_customer_subscriptions()
-	$sess->elt(0)
+	$sess->list_customer_subscriptions();
+	$sess->elt(0);
 
 - - -
     function ref($n) 
 Returns referal to returned value number `$n` in the transaction call history
 
-Examples: `ref(-1)`; `ref(0)`
+Examples: `ref(-1)`; `ref(0)`;
 
 - - -
     function amount($string) 
@@ -160,14 +160,14 @@ Examples: `ref(-1)`; `ref(0)`
 Returns amount object for passing as an argument to API calls. The amount
 precision is 2 digits and it must be passed as a string.
 
-Examples: `amount('100')`; `amount('100.22')`; `amount('100.23545')`
+Examples: `amount('100')`; `amount('100.22')`; `amount('100.23545')`;
              
 - - -
     function keyword($val) 
 
 Returns keyword for use as a name in API calls.
         
-Examples: `keyword(payment)`; `keyword(all)`
+Examples: `keyword(payment)`; `keyword(all)`;
 
 ### Customer utilities
 
@@ -224,7 +224,7 @@ method
 
 Example:
 
-	$product = $sess->get_product_params('CRM Complete - month', $customer)
+	$product = $sess->get_product_params('CRM Complete - month', $customer);
 
 - - -
     function BillinSession->configure_product($product, $changes) 
@@ -302,4 +302,3 @@ Example:
 	$sess->get_document_image('/tmp/invoice.pdf', ref(-1),
 			$output_format=keyword(pdf),
 			$image_type=keyword(original));
-
