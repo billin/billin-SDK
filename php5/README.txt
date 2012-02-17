@@ -316,3 +316,4 @@ Function Reference
                    $sess->get_document_image('/tmp/invoice.pdf', ref(-1),
                                                $output_format=keyword(pdf),
                                                $image_type=keyword(original))
+
