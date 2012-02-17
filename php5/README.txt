@@ -16,6 +16,7 @@ present, the SDK will scream about it.
 Open config.php5 in your favourite text editor and set following variables:
 
 $user - Your Billin application user name
+$password - Your Billin application user password - deprecated in favor of $api_key
 $api_key - Your Billin application user key string
            Create a user in the GUI, generate the key and set $api_key to it
 $debug - Set to false when done playing with the SDK
@@ -25,8 +26,10 @@ $cookie_jar - Set to a full path of a writable cookie store file
 Step 2. Test your Billin API communication
 --------------------------------------------------------------------------------
 
-The default configuration reflects our demo server - it's OK for testing.
-Relevant server configuration parameters in config.php5 are:
+Our demo server is OK for testing. Please setup the config.ph5 file for use on Billin demo. 
+
+Relevant server configuration parameters in config.php5 (besides $user,
+$api_key and $password) are:
 
 $server - 'http://localhost:8080' - Protocol, server and port number 
                                     for the Billin API server
