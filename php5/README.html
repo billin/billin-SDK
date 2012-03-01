@@ -1,0 +1,365 @@
+<h1>This is a draft of a manual for Billin PHP5 SDK - version 0.1</h1>
+
+<p>To get you started quickly have a look at a simple example contained in the <a href="https://github.com/billin/billin-SDK/blob/master/php5/test-billin.php5">test-billin.php5</a> file. Each SDK method used in there is commented to let you know what is happening in every step.</p>
+
+<h2>Step 1. Configure your Billin API</h2>
+
+<p>Make sure you are using PHP5 with the cURL extension installed. When cURL is not
+present, the SDK will scream about it.</p>
+
+<p>Open <a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a> in your favourite text editor and set following variables:</p>
+
+<ul>
+<li><code>$user</code> - your Billin application user name</li>
+<li><code>$password</code> - your Billin application user password - deprecated in favor of <code>$api_key</code></li>
+<li><code>$api_key</code> - your Billin application user key string Create a user in the GUI, generate the key and set <code>$api_key</code> to it</li>
+<li><code>$debug</code> - set to false when done testing the SDK</li>
+<li><code>$cookie_jar</code> - set to a full path of a writable cookie store file</li>
+</ul>
+
+<h2>Step 2. Test your Billin API communication</h2>
+
+<p>Our demo server is OK for testing. Please setup the <a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a> file for use on Billin demo. </p>
+
+<p>Relevant server configuration parameters in <a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a> (besides <code>$user</code>, <code>$api_key</code> and <code>$password</code>) are:</p>
+
+<ul>
+<li><code>$server</code> - eg 'http://localhost:8080' - Protocol, server and port number for the Billin API server</li>
+<li><code>$prefix</code> - eg '/dev/API/' - Your individual, private API prefix</li>
+<li><code>$system</code> - eg 'test' - Your system ID. Set this to 'prod' when done testing</li>
+</ul>
+
+<p>Let's give it a spin. Fire up your php5 CLI. On * nix and Linux it's</p>
+
+<pre><code>% time php5 ./billin-test.php5
+</code></pre>
+
+<p>The output for the command execution should look like:</p>
+
+<pre><code>GET: https://a.billin.pl/prefix???/API/test/v1/rollback/json
+GET: https://a.billin.pl/prefix???/API/test/v1/create(billing_data,fname="Jan",lname="Kowalski",city="Warszawa",post_code="00001",country="Poland",tax_id="1112223344",email="bit-bucket@mailinator.com",phone="+48111222333",company_name="ACME Widgets Inc.")/json
+GET: https://a.billin.pl/prefix???/API/test/v1/search(billing_data,oid=13934)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/elt(@-1,0)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/create(customer,billing_data=@-1)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/get_product_params("CRM Complete - month",parent=@-1)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/search(customer,oid=13938)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/elt(@-1,0)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/create(subscription,parent=@-1)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/search(subscription,oid=13947)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/elt(@-1,0)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/assign_product(@-1,"CRM Complete - month",17=$100,19=1)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/commit/json
+GET: https://a.billin.pl/prefix???/API/test/v1/search(subscription)/json
+Array
+(
+    [0] =&gt; Array
+    (
+        [0] =&gt; 50
+        [1] =&gt; 
+        [2] =&gt; :new
+    )
+
+...........
+)
+GET: https://a.billin.pl/prefix???/API/test/v1/search(customer,oid=13938)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/elt(@-1,0)/json
+GET: https://a.billin.pl/prefix???/API/test/v1/get_pending_payment(@-1,:payu)/json
+stdClass Object
+(
+    [success] =&gt; 1
+    [class_name] =&gt; payment
+    [oid] =&gt; 13995
+    [id] =&gt; fLzDKurvifxZLEdODYBN
+    [status] =&gt; :pending
+    [status_descr] =&gt; Oczekująca
+    [currency] =&gt; PLN
+    [amount] =&gt; 135.30
+    [balance] =&gt; 0.00
+    [descr] =&gt; id= 57
+    [create_dt] =&gt; 2012-02-17T11:29:58+01:00
+    [trans_dt] =&gt; 2012-02-17T11:29:58+01:00
+    [def] =&gt; stdClass Object
+    (
+        [class_name] =&gt; payment_def
+        [oid] =&gt; 1059
+        [id] =&gt; payu
+        [name] =&gt; PayU
+        [descr] =&gt; 
+        [method] =&gt; :online_payment
+        [accounting_code] =&gt; 
+    )
+
+    [assigned_invoice_id] =&gt; 
+    [subscription_oid] =&gt; 
+    [subscription_id] =&gt; 
+    [customer_oid] =&gt; 13938
+    [customer_id] =&gt; 57
+    [customer_ext_id] =&gt; 
+    [customer_billing_email] =&gt; bit-bucket@mailinator.com
+    [customer_billing_fname] =&gt; Jan
+    [customer_billing_lname] =&gt; Kowalski
+    [customer_billing_company_name] =&gt; ACME Widgets Inc.
+)
+php5 test-billin.php5  0.07s user 0.03s system 3% cpu 2.649 total
+</code></pre>
+
+<p>If the communication is working you can start integrating your subscription
+store with Billin!</p>
+
+<h2>Function Reference</h2>
+
+<h3>Session Object</h3>
+
+<pre><code>new BillinSession();
+</code></pre>
+
+<p>Creates a new session and invokes login on first API call if the API
+user is not logged in already.</p>
+
+<p>To login following variables set in <a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a> are used: <code>$user</code>, <code>$password</code> or <code>$api_key</code>. The preferred way to login is to use <code>$api_key</code> instead of the <code>$password</code>. It allows to login as the user and change it's password without blocking application access.</p>
+
+<h3>Transactions</h3>
+
+<pre><code>function BillinSession-&gt;commit()
+</code></pre>
+
+<p>Commits changes made during current transaction.</p>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;rollback()
+</code></pre>
+
+<p>Discards changes made during current transaction.</p>
+
+<h3>Generic utilities</h3>
+
+<pre><code>function BillinSession-&gt;call_api($fn, $args = array(), $named_args = array(), $post_args = array(), $return_json = True)
+</code></pre>
+
+<p>Invokes any API call named <code>$fn</code>. The mandatory arguments for invocation are
+<code>$args</code>, named arguments are <code>$named_args</code> and <code>$post_args</code> are used to invoke
+POST instead of a GET HTTP method for the API call.  The <code>$return_json</code>
+argument defaulting to True causes API call result to be formatted as JSON
+Returns API call result formatted as JSON or HTML if <code>$return_json</code> is False.
+Note that you don't have to use this function if the scope of current SDK
+version is sufficient.</p>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;elt($n, $list = Null)
+</code></pre>
+
+<p>Returns element <code>$n</code> of <code>$list</code>. Lists are 0-indexed. If <code>$list</code> is not
+specified it defaults to the last API call result - <code>ref(-1)</code>.</p>
+
+<p>Example - get the first subscription created in the system:</p>
+
+<pre><code>$sess-&gt;list_customer_subscriptions();
+$sess-&gt;elt(0);
+</code></pre>
+
+<hr>
+
+<pre><code>function ref($n)
+</code></pre>
+
+<p>Returns referal to returned value number <code>$n</code> in the transaction call history</p>
+
+<p>Examples: <code>ref(-1)</code>; <code>ref(0)</code>;</p>
+
+<hr>
+
+<pre><code>function amount($string)
+</code></pre>
+
+<p>Returns amount object for passing as an argument to API calls. The amount
+precision is 2 digits and it must be passed as a string.</p>
+
+<p>Examples: <code>amount('100')</code>; <code>amount('100.22')</code>; <code>amount('100.23545')</code>;</p>
+
+<hr>
+
+<pre><code>function keyword($val)
+</code></pre>
+
+<p>Returns keyword for use as a name in API calls.</p>
+
+<p>Examples: <code>keyword(payment)</code>; <code>keyword(all)</code>;</p>
+
+<h3>Customer utilities</h3>
+
+<pre><code>function BillinSession-&gt;create_billing_data($billing_data_args)
+</code></pre>
+
+<p>Creates and returns customer billing data. <code>$billing_data_args</code> are specified
+in the <a href="http://billin.pl/upload/billin_1.0/doc/create.html">create API call documentation</a></p>
+
+<p>Example:</p>
+
+<pre><code>   $billing_data =
+            $sess-&gt;create_billing_data(
+               array(fname =&gt; 'Jan', 
+                 lname =&gt; 'Kowalski', 
+                 city =&gt; 'Warszawa', 
+                 post_code =&gt; '00001', 
+                 country =&gt; 'Poland', 
+                 tax_id =&gt; '1112223344', 
+                 email =&gt; 'bit-bucket@mailinator.com', 
+                 phone =&gt; '+48111222333', 
+                 company_name =&gt; 'ACME Widgets Inc.')
+             );
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;create_customer($billing_data = Null, $customer_args = array())
+</code></pre>
+
+<p>Creates and returns a customer with <code>$billing_data</code> specified or
+defaulting to the most recently created object. <code>$customer_args</code> are
+specified in the <a href="http://billin.pl/upload/billin_1.0/doc/create.html">create API call documentation</a></p>
+
+<p>Example: </p>
+
+<pre><code>$customer = $sess-&gt;create_customer($billing_data);
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;list_customer_subscriptions()
+</code></pre>
+
+<p>Returns a list of all subscriptions in the system</p>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;all_subscriptions_status()
+</code></pre>
+
+<p>Returns a list of lists containing subscription id, subscription
+external id and subsription status (as a keyword starting with a colon)</p>
+
+<h3>Product utilities</h3>
+
+<pre><code>function BillinSession-&gt;get_product_params($id, $customer = Null)
+</code></pre>
+
+<p>For a product that is identified by <code>$id</code> and will be assigned to <code>$customer</code>,
+returns an object for product configuration using the <code>configure_product</code>
+method</p>
+
+<p>Example:</p>
+
+<pre><code>$product = $sess-&gt;get_product_params('CRM Complete - month', $customer);
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;configure_product($product, $changes)
+</code></pre>
+
+<p>Configures product for assignment. <code>$product</code> is returned by <code>get_product_params</code> invocation. <code>$changes</code> is an array mapping product definition tree parameter modifications to product configuration. Tree nodes are separated with the ! character.</p>
+
+<pre><code>    Example:    $sess-&gt;configure_product($product, 
+                         array('CRM Complete - miesieczny!Abonament CRM Complete!Cena indywidualna' =&gt; amount('100'),
+                               'CRM Complete - miesieczny' =&gt; 1)
+                       );
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;create_subscription($customer = Null, $subscription_args = array())
+</code></pre>
+
+<p>Creates and returns a subscription object. <code>$subscription_args</code> are described in the <a href="http://billin.pl/upload/billin_1.0/doc/create.html">create API call documentation</a></p>
+
+<p>Example: </p>
+
+<pre><code>$subscription = $sess-&gt;create_subscription($customer);
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;assign_product($product, $subscription = Null, $product_args = array())
+</code></pre>
+
+<p>Assigns a configured product to a previously created <code>$subscription</code>. Arguments for product creation are described in the <a href="http://billin.pl/upload/billin_1.0/doc/assign_product.html">assign_product API call documentation</a></p>
+
+<p>Example:</p>
+
+<pre><code>$sess-&gt;assign_product($product, $subscription);
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;swap_product($product, $subscription = Null, $swap_args = array())
+</code></pre>
+
+<p>Replaces a product in subscription with another. <code>$swap_args</code> are described in the
+<a href="http://billin.pl/upload/billin_1.0/doc/swap_product.html">swap_product API call documentation</a></p>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;list_products()
+</code></pre>
+
+<p>List all product id's and names as an array of arrays.</p>
+
+<h3>Balance information - invoices and payments</h3>
+
+<pre><code>function BillinSession-&gt;list_customer_invoices($customer, $named_args = array())
+</code></pre>
+
+<p>Returns a list of <code>$customer</code> invoices. <code>$named_args</code> are used to limit the
+list and are described in the <a href="http://billin.pl/upload/billin_1.0/doc/list_data.html">list_data API call documentation</a></p>
+
+<p>Note that <code>:initial</code>, <code>:normal</code> and so on indicate keywords. The are created in PHP with keyword('initial') and similar invocations of the <code>keyword</code> function.</p>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;list_customer_payments($customer = Null)
+</code></pre>
+
+<p>Returns all <code>$customer</code> payments</p>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;list_customer_balance_details($customer = Null)
+</code></pre>
+
+<p>Returns all <code>$customer</code> balance information - invoices and payments</p>
+
+<hr>
+
+<pre><code>function get_payu_pending_payment($customer = Null)
+</code></pre>
+
+<p>Returns pending payment information for PayU Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayU. The important fields of returned object are id and amount. </p>
+
+<h3>Invoice images</h3>
+
+<pre><code>function BillinSession-&gt;get_document_image($path, $invoice = Null, $output_format = Null, $image_type = Null)
+</code></pre>
+
+<p>Stores an invoice image in HTML or PDF in file <code>$path</code>. The <code>$path</code> must be writable. <code>$invoice</code> is an invoice object, <code>$output_format</code> is one of <code>keyword(html)</code>, <code>keyword(pdf)</code>. <code>$image_type</code> is one of <code>keyword(original)</code>, <code>keyword(copy)</code>.</p>
+
+<p>Example:   </p>
+
+<pre><code>$sess-&gt;list_customer_invoices();
+$sess-&gt;elt(0);
+$sess-&gt;get_document_image('/tmp/invoice.pdf', ref(-1),
+        $output_format=keyword(pdf),
+        $image_type=keyword(original));
+</code></pre>
+
+<h2>Hints</h2>
+
+<p>Massive amounts of data logged to syslog might trip on the rate limiting
+mechanism of rsyslogd. To disable rate limitting in rsyslogd on Linux, set
+following variables in <code>/etc/rsyslogd.conf</code>:</p>
+
+<pre><code>$IMUXSockRateLimitInterval 0
+$IMUXSockRateLimitBurst 1000
+$SystemLogRateLimitBurst 1000
+</code></pre>

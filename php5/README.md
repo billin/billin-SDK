@@ -302,3 +302,14 @@ Example:
 	$sess->get_document_image('/tmp/invoice.pdf', ref(-1),
 			$output_format=keyword(pdf),
 			$image_type=keyword(original));
+
+Hints
+----------------------------------------------------------------------------
+
+Massive amounts of data logged to syslog might trip on the rate limiting
+mechanism of rsyslogd. To disable rate limitting in rsyslogd on Linux, set
+following variables in `/etc/rsyslogd.conf`:
+
+	$IMUXSockRateLimitInterval 0
+	$IMUXSockRateLimitBurst 1000
+	$SystemLogRateLimitBurst 1000
