@@ -19,4 +19,6 @@ $api_version = 'v1';
 
 # logging
 $debug = True;
+$log_facility = LOG_LOCAL0;
+$log_process = "billin";
 ?>

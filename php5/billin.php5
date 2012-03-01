@@ -7,26 +7,12 @@
 
 ## requirement checks
 if (!in_array('curl', get_loaded_extensions())) {
-	die('cURL is not present in your PHP installation');
+	die("cURL is not present in your PHP installation\n");
 }
 
 require 'config.php5';
 require 'constants.php5';
 
-function mlog($arr) 
-{
-	global $debug;
-	if ($debug) {
-		foreach ($arr as $label => $val) {
-			if (is_array($val)) {
-				print "$label:\n";
-				var_dump($val);
-			} else {
-				print "$label: $val\n";
-			}
-		}
-	}
-}
 
 function map($fn, $arr) 
 {
@@ -61,7 +47,7 @@ function get_attrs()
 	{
 		$res = array();
 		foreach ($properties as $prop) {
-			$res[] = $elt->{$prop};
+			$res[$prop] = $elt->{$prop};
 		}
 		return $res;
 	};
@@ -245,12 +231,9 @@ class BillinInvalidCredentialsException extends BillinAPIException {
 
 function init_curl() 
 {
-	global $cookie_jar;
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, True);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_jar);
-	curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_jar);
 	return $ch;
 }
 
@@ -258,12 +241,49 @@ class BillinSession {
 	public $sid;
 	public $ch;
 	public $calls = array();
+	public $log_stream;
 
-	function __construct() 
+	function __construct($sid = Null) 
 	{
+		global $system, $debug, $log_process, $log_facility;
+
+		if ($debug) {
+			openlog($log_process, LOG_PID | LOG_PERROR, $log_facility);
+		}
 		global $system;
 		$this->ch = init_curl();
 		$this->change_system($system);
+
+		## initiate session id
+		if ($sid) {
+			$this->set_sid($sid);
+		} else {
+			$this->login();
+		}
+	}
+
+	function __destruct() {
+		global $debug;
+		if ($debug) {
+			closelog();
+		}
+	}
+
+	function mlog($x) 
+	{
+		global $debug; 
+
+		if ($debug) {
+			if (is_array($x)) {
+				foreach ($x as $label => $val) {
+					syslog(LOG_DEBUG, sprintf("%s: %s", $label, ((is_array($val) or is_object($val)) ? $print_r($val, True) : $val)));
+				}
+			} elseif (is_string($x)) {
+				syslog(LOG_DEBUG, $x);
+			} else {
+				die("Cannot mlog value of type " . gettype($x) . "\n");
+			}
+		}
 	}
 
 	function call_url($url, $post_args = array()) 
@@ -272,13 +292,13 @@ class BillinSession {
 
 		$qurl = $this->url . urlencode($url);
 		curl_setopt($this->ch, CURLOPT_URL, $qurl);
-		mlog(array(empty($post_args) ? 'GET' : 'POST' => $this->url . $url));
+		$this->mlog(array(empty($post_args) ? 'GET' : 'POST' => $this->url . $url));
 		if (!empty($post_args)) {
 			$fields = '';
 			foreach($post_args as $k => $v) { 
-				$fields .= $k. '=' . urlencode(api_quote($v)) . '&'; 
+				$fields .= $k . '=' . urlencode(api_quote($v)) . '&'; 
 			}
-			mlog(array('POST ARGS' => rtrim($fields, '&')));
+			$this->mlog(array('POST ARGS' => rtrim($fields, '&')));
 			curl_setopt($this->ch, CURLOPT_POST, count($post_args));
 			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields);
 		}
@@ -290,8 +310,8 @@ class BillinSession {
 		$status = curl_getinfo($this->ch);
 		$code = $status['http_code'];
 		if($code != 200) {
-			mlog(array('Result' => 'fail - ' . $result,
-				   'Code' => $status['http_code']));
+			$this->mlog(array('Result' => 'fail - ' . $result,
+				'Code' => $status['http_code']));
 			if ($code == 505) {
 				throw new BillinNoLoginException($url, $code, $result);
 			} elseif ($code == 501 or $code == 502) {
@@ -303,6 +323,10 @@ class BillinSession {
 			}
 		} else {
 			$this->calls[] = $url;
+			$this->mlog('RESULT');
+			foreach(split("\n", $result) as $line) {
+				$this->mlog($line);
+			}
 			return json_decode($result);
 		}
 	}
@@ -378,6 +402,12 @@ class BillinSession {
 		}
 	}
 
+	public function set_sid($sid)
+	{
+		$this->sid = $sid;
+		curl_setopt($this->ch, CURLOPT_COOKIE, 'XBS-SID=' . $sid);
+	}
+
 	public function login() 
 	{
 		global $system, $user, $password, $api_key;
@@ -398,8 +428,8 @@ class BillinSession {
 						array(),
 						array(user => $user, api_key => $api_key));
 				}
-				$this->sid = $json->{sid};
-				mlog(array('New session' => $json->{sid}));
+				$this->set_sid($json->{'sid'});
+				$this->mlog(array('New session' => $json->{'sid'}));
 			} catch (BillinAPIException $e) {
 				if ($e->code == 503) {
 					throw new BillinInvalidCredentialsException($user, $password);
@@ -447,6 +477,16 @@ class BillinSession {
 		return $this->call_api(create, array(customer), $customer_args+array(billing_data => ref(-1)));
 	}
 
+	public function search_customers($params = array())
+	{ 
+		return $this->call_api(search, array(customer), $params);
+	}
+
+	public function find_customer($params) {
+		$this->search_customers($params);
+		return $this->elt(0);
+	}
+
 	## subscription
 	public function list_customer_subscriptions()
 	{
@@ -491,7 +531,7 @@ class BillinSession {
 
 	public function list_products() 
 	{
-		return map(get_attr(id, name), $this->call_api(search, array(product_def)));
+		return map(get_attrs(id, name), $this->call_api(search, array(product_def)));
 	}
 
 	public function swap_product($product, $subscription = Null, $swap_args = array())
