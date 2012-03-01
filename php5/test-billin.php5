@@ -4,9 +4,6 @@ require 'billin.php5';
 ## session initiation
 $sess = new BillinSession();
 
-## wipe session history
-$sess->rollback();
-
 ## billing data creation
 $billing_data = $sess->create_billing_data(
 			       array(fname => 'Jan', 
