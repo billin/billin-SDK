@@ -110,13 +110,20 @@ store with Billin!</p>
 
 <h3>Session Object</h3>
 
-<pre><code>new BillinSession();
+<pre><code>new BillinSession($session_id = None);
 </code></pre>
 
-<p>Creates a new session and invokes login on first API call if the API
-user is not logged in already.</p>
+<p>Creates a new session and invokes login on first API call if the API user is
+not logged in already. If <code>$session_id</code> is passed, an exisiting session is
+resumed. Due to the construction of Billin API it's necessary to start a
+separate session for each logged customer application user. Using a single
+session object may lead to <a href="https://en.wikipedia.org/wiki/Heisenbug">Heisenbugs</a>.</p>
 
-<p>To login following variables set in <a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a> are used: <code>$user</code>, <code>$password</code> or <code>$api_key</code>. The preferred way to login is to use <code>$api_key</code> instead of the <code>$password</code>. It allows to login as the user and change it's password without blocking application access.</p>
+<p>To authenticate, following variables set in
+<a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a>
+are used: <code>$user</code>, <code>$password</code> or <code>$api_key</code>. The preferred way to login is to
+use <code>$api_key</code> instead of the <code>$password</code>. It allows to login as the user and
+change it's password without blocking application access.</p>
 
 <h3>Transactions</h3>
 
@@ -144,6 +151,16 @@ argument defaulting to True causes API call result to be formatted as JSON
 Returns API call result formatted as JSON or HTML if <code>$return_json</code> is False.
 Note that you don't have to use this function if the scope of current SDK
 version is sufficient.</p>
+
+<pre><code>function stack_api($fn, $args = array(), $named_args = array(), $post_args = array())
+</code></pre>
+
+<p>Adds function invocation to an API call stack.</p>
+
+<pre><code>function run_api_stack($return_json = True)
+</code></pre>
+
+<p>Executes all functions collected in the API call stack and empties the stack.</p>
 
 <hr>
 
@@ -224,6 +241,34 @@ specified in the <a href="http://billin.pl/upload/billin_1.0/doc/create.html">cr
 
 <pre><code>$customer = $sess-&gt;create_customer($billing_data);
 </code></pre>
+
+<hr>
+
+<pre><code>function search_customers($params = array())
+</code></pre>
+
+<p>Finds all customer objects defined by criteria described in the <a href="http://billin.pl/upload/billin_1.0/doc/search.html">search API
+call documentation</a></p>
+
+<p>Examples:</p>
+
+<pre><code>$customers = search_customers(array('city' =&gt; 'Warsaw'))
+</code></pre>
+
+<p>Returns all customers from Warsaw</p>
+
+<pre><code>$customers = search_customers(array('fts' =&gt; 'lname:kowal*'))
+</code></pre>
+
+<p>Performs <em>f</em>ull <em>t</em>ext <em>s</em>earch on all customers and returns customers with the
+last name starting with kowal (e.g. Kowalski, Kowalczyk...). The search is case
+insensitive.</p>
+
+<pre><code>function find_customer($params)
+</code></pre>
+
+<p>Returns the first customer object matching search parameters (equivalent of
+elt(0) on the results of <code>search_customers</code>).</p>
 
 <hr>
 
@@ -360,6 +405,6 @@ mechanism of rsyslogd. To disable rate limitting in rsyslogd on Linux, set
 following variables in <code>/etc/rsyslogd.conf</code>:</p>
 
 <pre><code>$IMUXSockRateLimitInterval 0
-$IMUXSockRateLimitBurst 1000
-$SystemLogRateLimitBurst 1000
+$IMUXSockRateLimitBurst 10000
+$SystemLogRateLimitBurst 10000
 </code></pre>

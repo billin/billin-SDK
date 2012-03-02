@@ -108,12 +108,19 @@ Function Reference
 
 ### Session Object
 
-    new BillinSession();
+    new BillinSession($session_id = None);
 
-Creates a new session and invokes login on first API call if the API
-user is not logged in already.
+Creates a new session and invokes login on first API call if the API user is
+not logged in already. If `$session_id` is passed, an exisiting session is
+resumed. Due to the construction of Billin API it's necessary to start a
+separate session for each logged customer application user. Using a single
+session object may lead to [Heisenbugs](https://en.wikipedia.org/wiki/Heisenbug).
 
-To login following variables set in [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) are used: `$user`, `$password` or `$api_key`. The preferred way to login is to use `$api_key` instead of the `$password`. It allows to login as the user and change it's password without blocking application access.
+To authenticate, following variables set in
+[config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5)
+are used: `$user`, `$password` or `$api_key`. The preferred way to login is to
+use `$api_key` instead of the `$password`. It allows to login as the user and
+change it's password without blocking application access.
 
 ### Transactions
 
@@ -137,6 +144,13 @@ argument defaulting to True causes API call result to be formatted as JSON
 Returns API call result formatted as JSON or HTML if `$return_json` is False.
 Note that you don't have to use this function if the scope of current SDK
 version is sufficient.
+
+
+    function stack_api($fn, $args = array(), $named_args = array(), $post_args = array()) 
+Adds function invocation to an API call stack.
+
+    function run_api_stack($return_json = True)
+Executes all functions collected in the API call stack and empties the stack.
 
 - - -
     function BillinSession->elt($n, $list = Null) 
@@ -202,6 +216,24 @@ specified in the [create API call documentation](http://billin.pl/upload/billin_
 Example: 
 
 	$customer = $sess->create_customer($billing_data);
+- - -
+	function search_customers($params = array())
+Finds all customer objects defined by criteria described in the [search API
+call documentation](http://billin.pl/upload/billin_1.0/doc/search.html)
+
+Examples:
+
+	$customers = search_customers(array('city' => 'Warsaw'))
+Returns all customers from Warsaw
+
+	$customers = search_customers(array('fts' => 'lname:kowal*'))
+Performs *f*ull *t*ext *s*earch on all customers and returns customers with the
+last name starting with kowal (e.g. Kowalski, Kowalczyk...). The search is case
+insensitive.
+
+	function find_customer($params)
+Returns the first customer object matching search parameters (equivalent of
+elt(0) on the results of `search_customers`).
 
 - - -
     function BillinSession->list_customer_subscriptions()
