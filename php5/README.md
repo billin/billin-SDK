@@ -311,5 +311,5 @@ mechanism of rsyslogd. To disable rate limitting in rsyslogd on Linux, set
 following variables in `/etc/rsyslogd.conf`:
 
 	$IMUXSockRateLimitInterval 0
-	$IMUXSockRateLimitBurst 1000
-	$SystemLogRateLimitBurst 1000
+	$IMUXSockRateLimitBurst 10000
+	$SystemLogRateLimitBurst 10000
