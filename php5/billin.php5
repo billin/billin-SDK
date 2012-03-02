@@ -341,19 +341,13 @@ class BillinSession {
 		}
 	}
 
-	public function call_api($fn, $args = array(), $named_args = array(), $post_args = array(), $return_json = True) 
-	{
-		$this->stack_api($fn, $args, $named_args, $post_args);
-		return $this->run_api_stack($return_json);
-	}
-
 	public function stack_api($fn, $args = array(), $named_args = array(), $post_args = array()) 
 	{
 		$args = join(',', map_list('api_quote', $args));
 		$named_args = join(',', map('api_quote', $named_args));
 
 		$url = $fn;
-		if (!empty($args) or !empty($named_args)) {
+		if ($args != '' or $named_args != '') {
 			$url = $fn . '(' . $args;
 			if (!empty($args) and !empty($named_args)) {
 				$url .= ',';
@@ -398,11 +392,19 @@ class BillinSession {
 		}
 	}
 
+	public function call_api($fn, $args = array(), $named_args = array(), $post_args = array(), $return_json = True) 
+	{
+		$this->stack_api($fn, $args, $named_args, $post_args);
+		return $this->run_api_stack($return_json);
+	}
+
+
 
 	function get_object($obj) 
 	{
-		$this->call_api(search, array($obj->{class_name}), array(oid => $obj->{oid}));
-		$this->elt(0);
+		$this->stack_api(search, array($obj->{class_name}), array(oid => $obj->{oid}));
+		$this->stack_api(elt, array(0));
+		return $this->run_api_stack();
 	}
 
 	function default_object($obj) 
@@ -513,8 +515,9 @@ class BillinSession {
 	}
 
 	public function find_customer($params) {
-		$this->search_customers($params);
-		return $this->elt(0);
+		$this->stack_api(search, array(customer), $params);
+		$this->stack_api(elt, array(0));
+		return $this->run_api_stack();
 	}
 
 	## subscription
