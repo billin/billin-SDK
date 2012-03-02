@@ -227,7 +227,7 @@ Examples:
 Returns all customers from Warsaw
 
 	$customers = search_customers(array('fts' => 'lname:kowal*'))
-Performs _f_ull _t_ext _s_earch on all customers and returns customers with the
+Performs __f__ull __t__ext __s__earch on all customers and returns customers with the
 last name starting with kowal (e.g. Kowalski, Kowalczyk...). The search is case
 insensitive.
 
