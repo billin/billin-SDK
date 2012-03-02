@@ -23,6 +23,16 @@ function map($fn, $arr)
 	return $res;
 }
 
+function first($arr)
+{
+	return $arr[0];
+}
+
+function second($arr)
+{
+	return $arr[1];
+}
+
 function map_list($fn, $arr) 
 {
 	$res = array();
@@ -276,7 +286,7 @@ class BillinSession {
 		if ($debug) {
 			if (is_array($x)) {
 				foreach ($x as $label => $val) {
-					syslog(LOG_DEBUG, sprintf("%s: %s", $label, ((is_array($val) or is_object($val)) ? $print_r($val, True) : $val)));
+					syslog(LOG_DEBUG, sprintf("%s: %s", $label, ((is_array($val) or is_object($val)) ? print_r($val, True) : $val)));
 				}
 			} elseif (is_string($x)) {
 				syslog(LOG_DEBUG, $x);
@@ -333,6 +343,12 @@ class BillinSession {
 
 	public function call_api($fn, $args = array(), $named_args = array(), $post_args = array(), $return_json = True) 
 	{
+		$this->stack_api($fn, $args, $named_args, $post_args);
+		return $this->run_api_stack($return_json);
+	}
+
+	public function stack_api($fn, $args = array(), $named_args = array(), $post_args = array()) 
+	{
 		$args = join(',', map_list('api_quote', $args));
 		$named_args = join(',', map('api_quote', $named_args));
 
@@ -345,9 +361,23 @@ class BillinSession {
 			$url .= $named_args . ')';
 		}
 
+		$this->api_stack[] = array($url, $post_args);
+	}
+
+	public function run_api_stack($return_json = True)
+	{
+		$res = map_list('first', $this->api_stack);
+		$url = join('/', $res);
+
 		if ($return_json) {
 			$url .= '/json';
 		}
+
+		$res = map_list('second', $this->api_stack);
+		$post_args = array_reduce($res, 'array_merge', array());
+
+		# reset the stack
+		$this->api_stack = array();
 
 		try {
 			return $this->call_url($url, $post_args);
