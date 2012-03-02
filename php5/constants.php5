@@ -32,6 +32,7 @@ define('login', 'login');
 define('max', 'max');
 define('min', 'min');
 define('name', 'name');
+define('no_params_assign', 'no_params_assign');
 define('no_params_swap', 'no_params_swap');
 define('oid', 'oid');
 define('open', 'open');
