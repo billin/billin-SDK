@@ -1,5 +1,5 @@
 <?
-require '../billin.php5';
+require '../../billin.php5';
 
 session_start();
 $billin = new BillinSession($_SESSION['XBS-SID']);
