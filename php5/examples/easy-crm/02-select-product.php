@@ -1,5 +1,5 @@
 <?
-require '../billin.php5';
+require '../../billin.php5';
 
 ## PHP session start
 session_start();
@@ -9,6 +9,11 @@ $billin = new BillinSession();
 $_SESSION['XBS-SID'] = $billin->sid;
 $billin->create_billing_data(array(fname => $_POST['fname'], 
                                    lname => $_POST['lname'],
+                                   company_name => $_POST['company'],
+                                   street => $_POST['street'],
+                                   city => $_POST['city'],
+                                   post_code => $_POST['post_code'],
+                                   tax_id => $_POST['tax_id'],
                                    email => $_POST['email']));
 $customer = $billin->create_customer();
 $_SESSION['CUSTOMER_ID'] = $customer->id;
