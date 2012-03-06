@@ -608,10 +608,16 @@ class BillinSession {
 		$invoice = $this->default_object($invoice);
 		$output_format = $output_format ? $output_format : keyword(pdf);
 		$image_type = $image_type ? $image_type : keyword(original);
-		$fp = fopen($path, 'w');
+		if (is_string($path)) {
+			$fp = fopen($path, 'w');
+		} else {
+			$fp = $path;
+		}
 		curl_setopt($this->ch, CURLOPT_FILE, $fp);
 		$this->call_api(get_document_image, array($invoice, $output_format), array(image_type => $image_type), array(), False);
-		fclose($fp);
+		if (is_string($path)) {
+			fclose($fp);
+		}
 		curl_close($this->ch);
 		$this->ch = init_curl();
 	}
