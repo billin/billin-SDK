@@ -15,7 +15,6 @@ Open [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.
 * `$password` - your Billin application user password - deprecated in favor of `$api_key`
 * `$api_key` - your Billin application user key string Create a user in the GUI, generate the key and set `$api_key` to it
 * `$debug` - set to false when done testing the SDK
-* `$cookie_jar` - set to a full path of a writable cookie store file
 
 Step 2. Test your Billin API communication
 --------------------------------------------------------------------------------
