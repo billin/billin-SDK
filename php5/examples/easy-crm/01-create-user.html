@@ -4,6 +4,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf8">
         <title>Stwórz konto</title>
+        <style>
+            body { font-family: Verdana, Arial, Sans-serif }
+            input { border: 0; border-bottom: 1px dotted black; background: white; color: black }
+            input[type="submit"] { border: 0; background: #333; color: white; padding: 10px; margin-top: 20px }
+            td:first-child { text-align: right; padding: 5 5 5 0; font-style: italic }
+        </style>
     </head>
 
     <body>
@@ -25,7 +31,7 @@
                 </tr>
 
                 <tr>
-                    <td>Email</td>
+                    <td>Email*</td>
                     <td><input type="text" name="email"></td>
                 </tr>
 
@@ -48,11 +54,15 @@
                     <td>NIP</td>
                     <td><input type="text" name="tax_id"></td>
                 </tr>
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                        <input type="submit" value="Stwórz konto >>">
+                    </td>
+                </tr>
             </table>
 
-            <p>
-            <input type="submit" value="Stwórz konto >>">
-            </p>
         </form>
     </body>
 </html>
