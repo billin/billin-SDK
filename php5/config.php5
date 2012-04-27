@@ -4,17 +4,14 @@
 ###############################################################
 
 # system credentials
-$user = '!!!FILL IN!!!';
-$password = '!!!FILL IN!!!';
+$user = 'CRM';
+$password = 'CRM-api-123';
 $api_key = Null;
 
 # end-point configuration
-$cookie_jar = 'cookies.txt';
-#$server = 'http://localhost:8080';
-#$prefix = '/dev/API/';
-$server = '!!!FILL IN!!!';
-$prefix = '!!!FILL IN!!!';
-$system = 'test';
+$server = 'https://a.billin.pl';
+$prefix = 'PLEASE_SET_THE_PREFIX';
+$system = 'prod';
 $api_version = 'v1';
 
 # logging
