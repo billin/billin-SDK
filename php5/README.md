@@ -102,6 +102,8 @@ The output for the command execution should look like:
 If the communication is working you can start integrating your subscription
 store with Billin!
 
+If there is a connection problem, please ensure that you have a CA certificate for a.billin.pl installed.
+
 Function Reference
 ----------------------------------------------------------------------------
 
