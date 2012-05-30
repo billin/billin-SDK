@@ -16,7 +16,7 @@ Open [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.
 * `$api_key` - your Billin application user key string Create a user in the GUI, generate the key and set `$api_key` to it
 * `$debug` - set to false when done testing the SDK
 * `$secure` - if set, the certificate of Billin API and Paylane Card Proxy will be verified
-* `$pcp` - Paylane Card Proxy address, e.g. https://localhost:8080/
+* `$pcp` - Paylane Card Proxy address, e.g. https://localhost:9080/
 * `$pcp_user` - Paylane Card Proxy user name - used only for credit card payments
 * `$pcp_pass` - Paylane Card Proxy password - used only for credit card payments
 
@@ -360,8 +360,8 @@ Perform card authorization for selected $customer object.
 <tr> <td> $street <td> customer street </tr>
 <tr> <td> $zipcode <td> customer postal code </tr>
 <tr> <td> $currency <td> transaction currency </tr>
-<tr> <td> $descr <td> transaction description - it's for initial authorisation only </tr>
-<tr> <td> $amount <td> transaction amount - it's for initial authorisation only, the amount will never be collected </tr>
+<tr> <td> $descr <td> transaction description - authorisation only </tr>
+<tr> <td> $amount <td> transaction amount - authorisation only, the amount will never be collected </tr>
 <table>
 
 Hints
