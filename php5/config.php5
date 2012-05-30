@@ -23,9 +23,10 @@ $pcp = 'https://localhost:9080/';
 $pcp_user = 'test';
 $pcp_pass = 'test';
 
-
 # logging
 $debug = True;
 $log_facility = LOG_LOCAL0;
 $log_process = "billin";
 ?>
+
+test
