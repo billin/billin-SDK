@@ -10,9 +10,14 @@ if (!in_array('curl', get_loaded_extensions())) {
 	die("cURL is not present in your PHP installation\n");
 }
 
+## libs
 require 'config.php5';
 require 'constants.php5';
 
+function identity($x)
+{
+	return $x;
+}
 
 function map($fn, $arr) 
 {
@@ -96,6 +101,22 @@ function api_quote($val, $key = Null)
 		return $res;
 	}
 }
+
+function post_fields($arr, $fn = 'identity')
+{
+	$fields = '';
+	foreach($arr as $k => $v) { 
+		$fields .= $k . '=' . urlencode(call_user_func($fn, $v)) . '&'; 
+	}
+	$fields = rtrim($fields, '&');
+	return $fields;
+}
+
+function mask_ccno($str)
+{
+	return substr($str, 12, 4);
+}
+
 
 class BillinAPIRef {
 	public $pos;
@@ -211,6 +232,17 @@ class BillinProductParams {
 	}
 }
 
+class BillinPCPException extends Exception {
+	public $descr;
+	public $number;
+	public $id_error;
+
+	function __construct($descr, $number, $id_error) {
+		list($this->descr, $this->number, $this->id_error) =
+			array($descr, $number, $id_error);
+	}
+}
+
 class BillinAPIException extends Exception {
 	public $url;
 	public $code;
@@ -239,17 +271,28 @@ class BillinInvalidCredentialsException extends BillinAPIException {
 	}
 }
 
-function init_curl() 
+function init_curl($user = Null, $pass = Null) 
 {
+	global $secure;
+
 	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, True);
+
+	# basic cURL config
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $secure ? True : False);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+	# cURL auth config
+	if ($user and $pass) {
+		curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+		curl_setopt($ch, CURLOPT_USERPWD, "$user:$pass");
+	}
 	return $ch;
 }
 
 class BillinSession {
 	public $sid;
 	public $ch;
+	public $pcp_ch;
 	public $calls = array();
 	public $log_stream;
 
@@ -296,48 +339,50 @@ class BillinSession {
 		}
 	}
 
+	function curl_call($ch, $url, $post_fields = '')
+	{
+		curl_setopt($ch, CURLOPT_URL, $url);
+		$this->mlog(array(($post_fields == '') ? 'GET' : 'POST' => $url));
+		if ($post_fields != '') {
+			$this->mlog(array('POST ARGS' => $post_fields));
+			curl_setopt($ch, CURLOPT_POST, 1+substr_count($post_fields, '&'));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
+		}
+		$result = curl_exec($ch);
+		if ($post_fields != '') {
+			curl_setopt($ch, CURLOPT_POST, False);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, Null);
+		}
+		$status = curl_getinfo($ch);
+		$code = $status['http_code'];
+		if ($code == 200) {
+			$this->mlog('RESULT');
+			foreach(split("\n", $result) as $line) {
+				$this->mlog($line);
+			}
+		}
+		$result = $code == 200 ? json_decode($result) : $result;
+		return array($result, $code);
+	}
+
 	function call_url($url, $post_args = array()) 
 	{
-		global $server;
-
 		$qurl = $this->url . urlencode($url);
-		curl_setopt($this->ch, CURLOPT_URL, $qurl);
-		$this->mlog(array(empty($post_args) ? 'GET' : 'POST' => $this->url . $url));
-		if (!empty($post_args)) {
-			$fields = '';
-			foreach($post_args as $k => $v) { 
-				$fields .= $k . '=' . urlencode(api_quote($v)) . '&'; 
-			}
-			$this->mlog(array('POST ARGS' => rtrim($fields, '&')));
-			curl_setopt($this->ch, CURLOPT_POST, count($post_args));
-			curl_setopt($this->ch, CURLOPT_POSTFIELDS, $fields);
-		}
-		$result = curl_exec($this->ch);
-		if (!empty($post_args)) {
-			curl_setopt($this->ch, CURLOPT_POST, False);
-			curl_setopt($this->ch, CURLOPT_POSTFIELDS, Null);
-		}
-		$status = curl_getinfo($this->ch);
-		$code = $status['http_code'];
-		if($code != 200) {
-			$this->mlog(array('Result' => 'fail - ' . $result,
-				'Code' => $status['http_code']));
+		list($result, $code) = $this->curl_call($this->ch, $qurl, post_fields($post_args, 'api_quote'));
+		if ($code == 200) {
+			$this->calls[] = $url;
+			return $result;
+		} else {
+			$this->mlog(array('Result' => 'fail - ' . $result, 'Code' => $code));
 			if ($code == 505) {
 				throw new BillinNoLoginException($url, $code, $result);
 			} elseif ($code == 501 or $code == 502) {
 				throw new BillinInvalidSessionException($url, $code, $result);
 			} elseif ($code == 0) {
-				die("Billin API connection refused, server: $server\n"); 
+				die("Connection refused: $url\n"); 
 			} else {
 				throw new BillinAPIException($url, $code, $result);
 			}
-		} else {
-			$this->calls[] = $url;
-			$this->mlog('RESULT');
-			foreach(split("\n", $result) as $line) {
-				$this->mlog($line);
-			}
-			return json_decode($result);
 		}
 	}
 
@@ -589,13 +634,6 @@ class BillinSession {
 		$this->call_api(list_data, array($customer, balance_detail), array(subtype => keyword(all)));
 	}
 
-	## payments
-	public function get_payu_pending_payment($customer = Null) 
-	{
-		$customer = $this->default_object($customer);
-		return $this->call_api(get_pending_payment, array($customer, keyword(payu)));
-	}
-
 	## invoices
 	public function list_customer_invoices($customer, $named_args = array())
 	{
@@ -620,6 +658,63 @@ class BillinSession {
 		}
 		curl_close($this->ch);
 		$this->ch = init_curl();
+	}
+
+
+	## payments
+	public function get_payu_pending_payment($customer = Null) 
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(get_pending_payment, array($customer, keyword(payu)));
+	}
+
+	### card payments
+	public function authorize_card($customer, $issuer, $ccno, $cvv, $expy, $expm, $name, $email, $ip, $country, $city, 
+					$street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
+	{
+		global $pcp, $pcp_user, $pcp_pass;
+
+		$customer = $this->default_object($customer);
+		if (!$this->pcp_ch) {
+			$this->pcp_ch = init_curl($pcp_user, $pcp_pass);
+		}
+		$fields = post_fields(array( ccno => $ccno, cvv => $cvv,
+			expy => $expy, expm => str_pad($expm . '', 2, '0', STR_PAD_LEFT), name => $name, email => $email, 
+			ip => $ip, country => $country, city => $city, street => $street,
+			zipcode => $zipcode, currency => $currency, amount => $amount, descr => $descr));
+		$this->mlog(array('user' => $pcp_user, 'pass' => $pcp_pass));
+		list($result, $code) = $this->curl_call($this->pcp_ch, $pcp . "auth", $fields);
+		if ($code == 200) {
+			$sale_id = $result->{'OK'}->{'id_sale_authorization'};
+			$fraud_score = $result->{'DATA'}->{'fraud_score'};
+			return $this->call_api(authorize_payment_method, array($customer, keyword('credit_card')),
+						array(sale_id => $sale_id, 
+						      successp => True,
+						      fraud_score => $fraud_score . '',
+						      issuer => keyword($issuer),
+						      ip => $ip,
+						      masked_number => mask_ccno($ccno),
+						      exp_year => intval($expy),
+						      exp_month => intval($expm)));
+
+		} else {
+			$result = json_decode($result);
+			if (property_exists($result, 'ERROR')) {
+				$e = $result->{'ERROR'};
+				return $this->call_api(authorize_payment_method, array($customer, keyword('credit_card')),
+						array(successp => False,
+						      ip => $ip,
+						      masked_number => mask_ccno($ccno),
+						      issuer => keyword($issuer),
+						      exp_year => intval($expy),
+						      exp_month => intval($expm),
+						      error_description => $e->{'error_description'}, 
+						      error_number => $e->{'error_number'}, 
+						      error_id => $e->{'id_error'}));
+			} else {
+				mlog(array("Invalid PCP error message format" => $result));
+			}
+		}
 	}
 }
 ?>

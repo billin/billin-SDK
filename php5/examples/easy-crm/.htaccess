@@ -1,0 +1,9 @@
+Order Allow,Deny
+Allow from All
+
+<FilesMatch "\.php5">
+    SetHandler application/x-httpd-php
+</FilesMatch>
+
+DirectoryIndex "01-create-user.html"
+Options +Indexes

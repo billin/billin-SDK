@@ -1,3 +1,5 @@
+#!/usr/bin/env php
+
 <?
 require 'billin.php5';
 
@@ -45,4 +47,12 @@ print_r($sess->all_subscriptions_status());
 
 ## get pending payment information for PayU IPSP
 print_r($sess->get_payu_pending_payment($customer));
+
+## authorize card
+try {
+	print_r($sess->authorize_card($customer, 'visa', '4111111111111111', '0000', 2020, 4, 'John Doe', 'jd@acme.com',
+					'127.0.0.1', 'US', 'NYC', 'Elm Street', '12345', 'EUR'));
+} catch (BillinPCPException $ex) {
+	print_r(array(descr => $ex->{descr}));
+}
 ?>
