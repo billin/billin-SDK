@@ -15,6 +15,10 @@ Open [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.
 * `$password` - your Billin application user password - deprecated in favor of `$api_key`
 * `$api_key` - your Billin application user key string Create a user in the GUI, generate the key and set `$api_key` to it
 * `$debug` - set to false when done testing the SDK
+* `$secure` - if set, the certificate of Billin API and Paylane Card Proxy will be verified
+* `$pcp` - Paylane Card Proxy address, e.g. https://localhost:8080/
+* `$pcp_user` - Paylane Card Proxy user name - used only for credit card payments
+* `$pcp_pass` - Paylane Card Proxy password - used only for credit card payments
 
 Step 2. Test your Billin API communication
 --------------------------------------------------------------------------------
@@ -335,6 +339,30 @@ Example:
 	$sess->get_document_image('/tmp/invoice.pdf', ref(-1),
 			$output_format=keyword(pdf),
 			$image_type=keyword(original));
+
+### Payments
+
+	function authorize_card($customer, $issuer, $ccno, $cvv, $expy, $expm, $name, $email, $ip, $country, $city, 
+				$street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
+
+Perform card authorization for selected $customer object. 
+
+<table>
+<tr> <td> $issuer <td> one of :visa and :mastercard </tr>
+<tr> <td> $ccno <td> the credit card number </tr>
+<tr> <td> $cvv <td> the Card Verification Value code </tr>
+<tr> <td> $expy <td> expiration year </tr>
+<tr> <td> $expm <td> expiration month </tr>
+<tr> <td> $email <td> customer email </tr>
+<tr> <td> $ip <td> customer ip address </tr>
+<tr> <td> $country <td> customer country </tr>
+<tr> <td> $city <td> customer city </tr>
+<tr> <td> $street <td> customer street </tr>
+<tr> <td> $zipcode <td> customer postal code </tr>
+<tr> <td> $currency <td> transaction currency </tr>
+<tr> <td> $descr <td> transaction description - it's for initial authorisation only </tr>
+<tr> <td> $amount <td> transaction amount - it's for initial authorisation only, the amount will never be collected </tr>
+<table>
 
 Hints
 ----------------------------------------------------------------------------
