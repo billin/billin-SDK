@@ -725,7 +725,7 @@ class BillinSession {
 						      error_number => $e->{'error_number'}, 
 						      error_id => $e->{'id_error'}));
 			} else {
-				mlog(array("Invalid PCP error message format" => $result));
+				$this->mlog(array("Invalid PCP error message format" => $result));
 			}
 		}
 	}
