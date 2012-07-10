@@ -14,7 +14,10 @@ present, the SDK will scream about it.</p>
 <li><code>$password</code> - your Billin application user password - deprecated in favor of <code>$api_key</code></li>
 <li><code>$api_key</code> - your Billin application user key string Create a user in the GUI, generate the key and set <code>$api_key</code> to it</li>
 <li><code>$debug</code> - set to false when done testing the SDK</li>
-<li><code>$cookie_jar</code> - set to a full path of a writable cookie store file</li>
+<li><code>$secure</code> - if set, the certificate of Billin API and Paylane Card Proxy will be verified</li>
+<li><code>$pcp</code> - Paylane Card Proxy address, e.g. https://localhost:9080/</li>
+<li><code>$pcp_user</code> - Paylane Card Proxy user name - used only for credit card payments</li>
+<li><code>$pcp_pass</code> - Paylane Card Proxy password - used only for credit card payments</li>
 </ul>
 
 <h2>Step 2. Test your Billin API communication</h2>
@@ -105,6 +108,8 @@ php5 test-billin.php5  0.07s user 0.03s system 3% cpu 2.649 total
 
 <p>If the communication is working you can start integrating your subscription
 store with Billin!</p>
+
+<p>If there is a connection problem, please ensure that you have a CA certificate for a.billin.pl installed.</p>
 
 <h2>Function Reference</h2>
 
@@ -351,6 +356,18 @@ method</p>
 
 <p>List all product id's and names as an array of arrays.</p>
 
+<h3>Coupons</h3>
+
+<pre><code>function BillinSession-&gt;check_coupon($code)
+</code></pre>
+
+<p>The function verifies if a coupon code is valid. On success a coupon_def is returned. On failure null is returned.</p>
+
+<pre><code>function BillinSession-&gt;redeem_coupon($customer, $code, $skip_invalid_coupon_error)
+</code></pre>
+
+<p>Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached).</p>
+
 <h3>Balance information - invoices and payments</h3>
 
 <pre><code>function BillinSession-&gt;list_customer_invoices($customer, $named_args = array())
@@ -397,6 +414,31 @@ $sess-&gt;get_document_image('/tmp/invoice.pdf', ref(-1),
         $output_format=keyword(pdf),
         $image_type=keyword(original));
 </code></pre>
+
+<h3>Payments</h3>
+
+<pre><code>function authorize_card($customer, $issuer, $ccno, $cvv, $expy, $expm, $name, $email, $ip, $country, $city, 
+            $street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
+</code></pre>
+
+<p>Perform card authorization for selected $customer object. </p>
+
+<p><table>
+<tr> <td> $issuer <td> one of :visa and :mastercard </tr>
+<tr> <td> $ccno <td> the credit card number </tr>
+<tr> <td> $cvv <td> the Card Verification Value code </tr>
+<tr> <td> $expy <td> expiration year </tr>
+<tr> <td> $expm <td> expiration month </tr>
+<tr> <td> $email <td> customer email </tr>
+<tr> <td> $ip <td> customer ip address </tr>
+<tr> <td> $country <td> customer country </tr>
+<tr> <td> $city <td> customer city </tr>
+<tr> <td> $street <td> customer street </tr>
+<tr> <td> $zipcode <td> customer postal code </tr>
+<tr> <td> $currency <td> transaction currency </tr>
+<tr> <td> $descr <td> transaction description - authorisation only </tr>
+<tr> <td> $amount <td> transaction amount - authorisation only, the amount will never be collected </tr>
+<table></p>
 
 <h2>Hints</h2>
 

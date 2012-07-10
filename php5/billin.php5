@@ -618,20 +618,33 @@ class BillinSession {
 		if (empty($product->changes)) {
 			$swap_args['no_params_swap'] = True;
 		}
-		$this->call_api(swap_product, array($subscription, $product->{id}), $swap_args+$product->changes);
+		return $this->call_api(swap_product, array($subscription, $product->{id}), $swap_args+$product->changes);
+	}
+
+	## coupons
+	public function check_coupon($code)
+	{
+		return $this->call_api(check_coupon, array($code));
+	}
+
+	public function redeem_coupon($customer = Null, $code, $skip_invalid_coupon_error = False)
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(redeem_coupon, array($customer, $code), 
+					array(skip_invalid_coupon_error => $skip_invalid_coupon_error));
 	}
 
 	## balance details
 	public function list_customer_payments($customer = Null) 
 	{
 		$customer = $this->default_object($customer);
-		$this->call_api(list_data, array($customer, balance_detail), array(subtype => keyword(payment)));
+		return $this->call_api(list_data, array($customer, balance_detail), array(subtype => keyword(payment)));
 	}
 
 	public function list_customer_balance_details($customer = Null) 
 	{
 		$customer = $this->default_object($customer);
-		$this->call_api(list_data, array($customer, balance_detail), array(subtype => keyword(all)));
+		return $this->call_api(list_data, array($customer, balance_detail), array(subtype => keyword(all)));
 	}
 
 	## invoices

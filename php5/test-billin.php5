@@ -19,11 +19,16 @@ $billing_data = $sess->create_billing_data(
 				     company_name => 'ACME Widgets Inc.')
 			     );
 
+## coupon check
+$sess->check_coupon('000sd');
+
 ## customer creation
 $customer = $sess->create_customer($billing_data);
 
+$sess->redeem_coupon(ref(-1), '000sd');
+
 ## product retrieval by product_id, $customer was assigned before
-$product = $sess->get_product_params('CRM Complete - month', ref(-1));
+$product = $sess->get_product_params('CRM Complete - month', ref(-2));
 
 ## product configuration
 ## ! is used as a product parameter tree separator - it reflects product

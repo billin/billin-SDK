@@ -302,6 +302,16 @@ Replaces a product in subscription with another. `$swap_args` are described in t
         
 List all product id's and names as an array of arrays.
 
+### Coupons
+
+    function BillinSession->check_coupon($code)
+
+The function verifies if a coupon code is valid. On success a coupon\_def is returned. On failure null is returned.
+
+    function BillinSession->redeem_coupon($customer, $code, $skip_invalid_coupon_error)
+
+Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached).
+
 ### Balance information - invoices and payments
 
     function BillinSession->list_customer_invoices($customer, $named_args = array())
