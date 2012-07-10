@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 
-<?
+<?php
 require 'billin.php5';
 
 ## session initiation

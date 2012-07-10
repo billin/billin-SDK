@@ -1,4 +1,4 @@
-<?
+<?php
 define('amount', 'amount');
 define('assign_product', 'assign_product');
 define('authorize_payment_method', 'authorize_payment_method');
