@@ -310,7 +310,7 @@ The function verifies if a coupon code is valid. On success a coupon\_def is ret
 
     function BillinSession->redeem_coupon($customer, $code, $skip_invalid_coupon_error)
 
-Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached).
+Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached). Null value is returned on error if $skip\_invalid\_coupon\_error is set to True.
 
 ### Balance information - invoices and payments
 

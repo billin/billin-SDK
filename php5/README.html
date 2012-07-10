@@ -366,7 +366,7 @@ method</p>
 <pre><code>function BillinSession-&gt;redeem_coupon($customer, $code, $skip_invalid_coupon_error)
 </code></pre>
 
-<p>Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached).</p>
+<p>Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached). Null value is returned on error if $skip_invalid_coupon_error is set to True.</p>
 
 <h3>Balance information - invoices and payments</h3>
 
