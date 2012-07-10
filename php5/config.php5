@@ -28,5 +28,3 @@ $debug = True;
 $log_facility = LOG_LOCAL0;
 $log_process = "billin";
 ?>
-
-test
