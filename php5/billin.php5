@@ -1,4 +1,4 @@
-<?
+<?php
 ###############################################################
 ### Billin Software Developer's Kit for PHP5
 ### Copyright © 2012. All rights reserved. Billin Sp. z o.o.
@@ -227,7 +227,7 @@ class BillinProductParams {
 
 	public function update_property($name, $value) 
 	{
-		$nlist = split('!', $name);
+		$nlist = mb_split('!', $name);
 		$this->update_property_list($this->json, $nlist, $value);
 	}
 }
@@ -357,7 +357,7 @@ class BillinSession {
 		$code = $status['http_code'];
 		if ($code == 200) {
 			$this->mlog('RESULT');
-			foreach(split("\n", $result) as $line) {
+			foreach(mb_split("\n", $result) as $line) {
 				$this->mlog($line);
 			}
 		}
@@ -622,9 +622,9 @@ class BillinSession {
 	}
 
 	## coupons
-	public function check_coupon($code)
+	public function check_coupon($code, $product_name = Null)
 	{
-		return $this->call_api(check_coupon, array($code));
+		return $this->call_api(check_coupon, array($code), $product_name ? array(product => $product_name) : array());
 	}
 
 	public function redeem_coupon($customer = Null, $code, $skip_invalid_coupon_error = False)

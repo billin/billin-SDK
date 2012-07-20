@@ -1,4 +1,4 @@
-This is a draft of a manual for Billin PHP5 SDK - version 0.2
+This is a draft of a manual for Billin PHP5 SDK - version 0.3
 ================================================================================
 
 To get you started quickly have a look at a simple example contained in the [test-billin.php5](https://github.com/billin/billin-SDK/blob/master/php5/test-billin.php5) file. Each SDK method used in there is commented to let you know what is happening in every step.
@@ -304,9 +304,9 @@ List all product id's and names as an array of arrays.
 
 ### Coupons
 
-    function BillinSession->check_coupon($code)
+    function BillinSession->check_coupon($code, $product_name = Null)
 
-The function verifies if a coupon code is valid. On success a coupon\_def is returned. On failure null is returned.
+The function verifies if a coupon code is valid. On success a coupon\_def is returned. On failure null is returned. If the optional $product\_name argument is passed, the function validates if the $code is valid for the supplied product name.
 
     function BillinSession->redeem_coupon($customer, $code, $skip_invalid_coupon_error)
 

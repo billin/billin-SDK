@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 
-<?
+<?php
 require 'billin.php5';
 
 ## session initiation
@@ -21,6 +21,7 @@ $billing_data = $sess->create_billing_data(
 
 ## coupon check
 $sess->check_coupon('000sd');
+$sess->check_coupon('000sd', 'CRM Basic - month');
 
 ## customer creation
 $customer = $sess->create_customer($billing_data);

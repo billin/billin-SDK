@@ -1,4 +1,4 @@
-<?
+<?php
 require '../../billin.php5';
 
 ## PHP session start
