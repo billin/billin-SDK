@@ -622,9 +622,9 @@ class BillinSession {
 	}
 
 	## coupons
-	public function check_coupon($code, $product_name = Null)
+	public function check_coupon($code, $product = Null)
 	{
-		return $this->call_api(check_coupon, array($code), $product_name ? array(product => $product_name) : array());
+		return $this->call_api(check_coupon, array($code), $product ? array(product => $product) : array());
 	}
 
 	public function redeem_coupon($customer = Null, $code, $skip_invalid_coupon_error = False)

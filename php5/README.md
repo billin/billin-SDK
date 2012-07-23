@@ -304,9 +304,9 @@ List all product id's and names as an array of arrays.
 
 ### Coupons
 
-    function BillinSession->check_coupon($code, $product_name = Null)
+    function BillinSession->check_coupon($code, $product = Null)
 
-The function verifies if a coupon code is valid. On success a coupon\_def is returned. On failure null is returned. If the optional $product\_name argument is passed, the function validates if the $code is valid for the supplied product name.
+The function verifies if a coupon code is valid. On success a coupon\_def is returned. On failure null is returned. If the optional $product argument is passed, the function validates if the $code is valid for the supplied product. The $product argument can be one of product name/product oid/product def object.
 
     function BillinSession->redeem_coupon($customer, $code, $skip_invalid_coupon_error)
 
