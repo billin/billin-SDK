@@ -341,8 +341,9 @@ class BillinSession {
 
 	function curl_call($ch, $url, $post_fields = '')
 	{
-		curl_setopt($ch, CURLOPT_URL, $url);
-		$this->mlog(array(($post_fields == '') ? 'GET' : 'POST' => $url));
+		$qurl = $this->url . urlencode($url);
+		curl_setopt($ch, CURLOPT_URL, $qurl);
+		$this->mlog(array(($post_fields == '') ? 'GET' : 'POST' => $this->url . $url));
 		if ($post_fields != '') {
 			$this->mlog(array('POST ARGS' => $post_fields));
 			curl_setopt($ch, CURLOPT_POST, 1+substr_count($post_fields, '&'));
@@ -367,8 +368,7 @@ class BillinSession {
 
 	function call_url($url, $post_args = array()) 
 	{
-		$qurl = $this->url . urlencode($url);
-		list($result, $code) = $this->curl_call($this->ch, $qurl, post_fields($post_args, 'api_quote'));
+		list($result, $code) = $this->curl_call($this->ch, $url, post_fields($post_args, 'api_quote'));
 		if ($code == 200) {
 			$this->calls[] = $url;
 			return $result;
@@ -379,7 +379,7 @@ class BillinSession {
 			} elseif ($code == 501 or $code == 502) {
 				throw new BillinInvalidSessionException($url, $code, $result);
 			} elseif ($code == 0) {
-				die("Connection refused: $url\n"); 
+				die("Connection refused or certificate validation failed for $url\n"); 
 			} else {
 				throw new BillinAPIException($url, $code, $result);
 			}
