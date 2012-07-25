@@ -4,6 +4,8 @@
 ### Copyright © 2012. All rights reserved. Billin Sp. z o.o.
 ###############################################################
 
+global $system, $user, $password, $api_key, $server, $prefix, 
+	$debug, $log_process, $log_facility, $api_version;
 
 ## requirement checks
 if (!in_array('curl', get_loaded_extensions())) {
