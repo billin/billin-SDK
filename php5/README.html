@@ -277,10 +277,10 @@ elt(0) on the results of <code>search_customers</code>).</p>
 
 <hr>
 
-<pre><code>function BillinSession-&gt;list_customer_subscriptions()
+<pre><code>function BillinSession-&gt;list_customer_subscriptions($customer = Null)
 </code></pre>
 
-<p>Returns a list of all subscriptions in the system</p>
+<p>Returns a list of all subscriptions in the system. The optional $customer parameter enables narrowing of the subscription list to the $customer's subscriptions.</p>
 
 <hr>
 

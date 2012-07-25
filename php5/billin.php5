@@ -568,9 +568,14 @@ class BillinSession {
 	}
 
 	## subscription
-	public function list_customer_subscriptions()
+	public function list_customer_subscriptions($customer = Null)
 	{
-		return $this->call_api(search, array(subscription));
+		if ($customer) {
+			$customer = $this->default_object($customer);
+			return $this->call_api(list_data, array($customer, subscription));
+		} else {
+			return $this->call_api(search, array(subscription));
+		}
 	}
 
 	public function all_subscriptions_status() 

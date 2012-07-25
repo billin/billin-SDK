@@ -241,9 +241,9 @@ Returns the first customer object matching search parameters (equivalent of
 elt(0) on the results of `search_customers`).
 
 - - -
-    function BillinSession->list_customer_subscriptions()
+    function BillinSession->list_customer_subscriptions($customer = Null)
 
-Returns a list of all subscriptions in the system
+Returns a list of all subscriptions in the system. The optional $customer parameter enables narrowing of the subscription list to the $customer's subscriptions.
 
 - - -
     function BillinSession->all_subscriptions_status() 
