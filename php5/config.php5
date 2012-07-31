@@ -25,6 +25,7 @@ $pcp_pass = 'test';
 
 # logging
 $debug = True;
+$console_log = False;
 $log_facility = LOG_LOCAL0;
 $log_process = "billin";
 ?>

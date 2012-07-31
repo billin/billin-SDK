@@ -5,7 +5,7 @@
 ###############################################################
 
 global $system, $user, $password, $api_key, $server, $prefix, 
-	$debug, $log_process, $log_facility, $api_version;
+	$debug, $log_process, $log_facility, $api_version, $console_log;
 
 ## requirement checks
 if (!in_array('curl', get_loaded_extensions())) {
@@ -326,17 +326,26 @@ class BillinSession {
 
 	function mlog($x) 
 	{
-		global $debug; 
+		global $debug, $console_log; 
 
 		if ($debug) {
+			$msg = False;
 			if (is_array($x)) {
 				foreach ($x as $label => $val) {
-					syslog(LOG_DEBUG, sprintf("%s: %s", $label, ((is_array($val) or is_object($val)) ? print_r($val, True) : $val)));
+					$msg = sprintf("%s: %s", $label, ((is_array($val) or is_object($val)) ? print_r($val, True) : $val));
 				}
 			} elseif (is_string($x)) {
-				syslog(LOG_DEBUG, $x);
+				$msg = $x;
 			} else {
 				die("Cannot mlog value of type " . gettype($x) . "\n");
+			}
+
+			if ($msg) {
+				if ($console_log) {
+					printf("%s\n", $msg);
+				} else {
+					syslog(LOG_DEBUG, $msg);
+				}
 			}
 		}
 	}
