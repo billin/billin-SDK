@@ -2,10 +2,15 @@
 
 <p>To get you started quickly have a look at a simple example contained in the <a href="https://github.com/billin/billin-SDK/blob/master/php5/test-billin.php5">test-billin.php5</a> file. Each SDK method used in there is commented to let you know what is happening in every step.</p>
 
-<h2>Step 1. Configure your Billin API</h2>
+<h2>Step 0. Before you start</h2>
 
-<p>Make sure you are using PHP5 with the cURL extension installed. When cURL is not
-present, the SDK will scream about it.</p>
+<ul>
+<li>PHP version 5.3 or higher is required</li>
+<li>You must have the cURL extension built and enabled in your php.ini to use the SDK</li>
+<li>You should be able to use the syslog module to be able to debug the SDK requests in case something goes wrong</li>
+</ul>
+
+<h2>Step 1. Configure your Billin API</h2>
 
 <p>Open <a href="https://github.com/billin/billin-SDK/blob/master/php5/config.php5">config.php5</a> in your favourite text editor and set following variables:</p>
 
@@ -13,11 +18,12 @@ present, the SDK will scream about it.</p>
 <li><code>$user</code> - your Billin application user name</li>
 <li><code>$password</code> - your Billin application user password - deprecated in favor of <code>$api_key</code></li>
 <li><code>$api_key</code> - your Billin application user key string Create a user in the GUI, generate the key and set <code>$api_key</code> to it</li>
-<li><code>$debug</code> - set to false when done testing the SDK</li>
 <li><code>$secure</code> - if set, the certificate of Billin API and Paylane Card Proxy will be verified</li>
 <li><code>$pcp</code> - Paylane Card Proxy address, e.g. https://localhost:9080/</li>
 <li><code>$pcp_user</code> - Paylane Card Proxy user name - used only for credit card payments</li>
 <li><code>$pcp_pass</code> - Paylane Card Proxy password - used only for credit card payments</li>
+<li><code>$debug</code> - enables extra debugging output to syslog, set to false when done testing the SDK</li>
+<li><code>$console_log</code> - enables loging to console when debugging with PHP CLI</li>
 </ul>
 
 <h2>Step 2. Test your Billin API communication</h2>

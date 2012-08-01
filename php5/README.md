@@ -3,22 +3,27 @@ This is a draft of a manual for Billin PHP5 SDK - version 0.3
 
 To get you started quickly have a look at a simple example contained in the [test-billin.php5](https://github.com/billin/billin-SDK/blob/master/php5/test-billin.php5) file. Each SDK method used in there is commented to let you know what is happening in every step.
 
+Step 0. Before you start
+----------------------------------------------------------------------------
+
+* PHP version 5.3 or higher is required
+* You must have the cURL extension built and enabled in your php.ini to use the SDK
+* You should be able to use the syslog module to be able to debug the SDK requests in case something goes wrong
+
 Step 1. Configure your Billin API
 --------------------------------------------------------------------------------
-
-Make sure you are using PHP5 with the cURL extension installed. When cURL is not
-present, the SDK will scream about it.
 
 Open [config.php5](https://github.com/billin/billin-SDK/blob/master/php5/config.php5) in your favourite text editor and set following variables:
 
 * `$user` - your Billin application user name
 * `$password` - your Billin application user password - deprecated in favor of `$api_key`
 * `$api_key` - your Billin application user key string Create a user in the GUI, generate the key and set `$api_key` to it
-* `$debug` - set to false when done testing the SDK
 * `$secure` - if set, the certificate of Billin API and Paylane Card Proxy will be verified
 * `$pcp` - Paylane Card Proxy address, e.g. https://localhost:9080/
 * `$pcp_user` - Paylane Card Proxy user name - used only for credit card payments
 * `$pcp_pass` - Paylane Card Proxy password - used only for credit card payments
+* `$debug` - enables extra debugging output to syslog, set to false when done testing the SDK
+* `$console_log` - enables loging to console when debugging with PHP CLI
 
 Step 2. Test your Billin API communication
 --------------------------------------------------------------------------------
