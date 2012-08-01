@@ -332,17 +332,17 @@ class BillinSession {
 			$msg = False;
 			if (is_array($x)) {
 				foreach ($x as $label => $val) {
-					$msg = sprintf("%s: %s", $label, ((is_array($val) or is_object($val)) ? print_r($val, True) : $val));
+					$msg .= sprintf("%s: %s\n", $label, ((is_array($val) or is_object($val)) ? print_r($val, True) : $val));
 				}
 			} elseif (is_string($x)) {
-				$msg = $x;
+				$msg = "$x\n";
 			} else {
 				die("Cannot mlog value of type " . gettype($x) . "\n");
 			}
 
 			if ($msg) {
 				if ($console_log) {
-					printf("%s\n", $msg);
+					print($msg);
 				} else {
 					syslog(LOG_DEBUG, $msg);
 				}
@@ -384,7 +384,7 @@ class BillinSession {
 			$this->calls[] = $url;
 			return $result;
 		} else {
-			$this->mlog(array('Result' => 'fail - ' . $result, 'Code' => $code));
+			$this->mlog(array('Result' => "fail - $result", 'Code' => $code));
 			if ($code == 505) {
 				throw new BillinNoLoginException($url, $code, $result);
 			} elseif ($code == 501 or $code == 502) {
