@@ -252,7 +252,7 @@ class BillinAPIException extends Exception {
 
 	function __construct($url, $code, $response) 
 	{
-		list($this->url, $this->code, $this->reponse) = 
+		list($this->url, $this->code, $this->response) = 
 			array($url, $code, $response);
 	}
 }
