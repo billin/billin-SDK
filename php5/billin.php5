@@ -625,7 +625,7 @@ class BillinSession {
 
 	public function list_products() 
 	{
-		return map(get_attrs(id, name), $this->call_api(search, array(product_def)));
+		return map(get_attrs(id, name, descr), $this->call_api(search, array(product_def)));
 	}
 
 	public function swap_product($product, $subscription = Null, $swap_args = array())
