@@ -1,7 +1,9 @@
 <?php
+define('all', 'all');
 define('amount', 'amount');
 define('assign_product', 'assign_product');
 define('authorize_payment_method', 'authorize_payment_method');
+define('balance_detail', 'balance_detail');
 define('bill_cycle', 'bill_cycle');
 define('billing_data', 'billing_data');
 define('cardinality', 'cardinality');
@@ -58,6 +60,7 @@ define('override_trial_duration_days', 'override_trial_duration_days');
 define('params', 'params');
 define('parent', 'parent');
 define('pass', 'pass');
+define('payment', 'payment');
 define('payment_due_days', 'payment_due_days');
 define('payu', 'payu');
 define('pdf', 'pdf');
@@ -81,6 +84,7 @@ define('skip_trial', 'skip_trial');
 define('status', 'status');
 define('street', 'street');
 define('subscription', 'subscription');
+define('subtype', 'subtype');
 define('successp', 'successp');
 define('swap_at_paid_to_dt', 'swap_at_paid_to_dt');
 define('swap_dt', 'swap_dt');
