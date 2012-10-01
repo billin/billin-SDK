@@ -211,8 +211,10 @@ class BillinProductParams {
 			$subs = $json->{params};
 		}
 
+		$updated = False;
 		foreach ($subs as $child) {
 			if ($child->{name} == $name or $child->{id} == $name) {
+				$updated = True;
 				if (count($nlist) > $n+1) {
 					$this->update_property_list($child, $nlist, $value, $n+1);
 				} else {
@@ -224,6 +226,9 @@ class BillinProductParams {
 					$this->changes[$child->{xid}] = $value;
 				}
 			}
+		}
+		if (!$updated) {
+			die("Unable to find property $name to update");
 		}
 	}
 
