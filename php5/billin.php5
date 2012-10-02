@@ -633,6 +633,11 @@ class BillinSession {
 		return map(get_attrs(id, name, descr), $this->call_api(search, array(product_def)));
 	}
 
+	public function search_products($params)
+	{
+		return $this->call_api(search, array(product_def), $params);
+	}
+
 	public function swap_product($product, $subscription = Null, $swap_args = array())
 	{
 		$subscription = $this->default_object($subscription);
@@ -643,6 +648,11 @@ class BillinSession {
 	}
 
 	## coupons
+	public function create_coupon($params)
+	{
+		return $this->call_api(create, array(coupon_def), $params);
+	}
+	
 	public function check_coupon($code, $product = Null)
 	{
 		return $this->call_api(check_coupon, array($code), $product ? array(product => $product) : array());

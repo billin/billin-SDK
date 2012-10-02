@@ -374,6 +374,20 @@ method</p>
 
 <p>Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached). Null value is returned on error if $skip_invalid_coupon_error is set to True.</p>
 
+<pre><code>function public function create_coupon($params)
+</code></pre>
+
+<p>Create a discount coupon for specified params. Example:</p>
+
+<pre><code>$sess-&gt;search_products(array(id =&gt; 'CRM Basic - year'));
+$sess-&gt;create_coupon(array(name =&gt; 'kupon', code_length =&gt; 20, descr =&gt; 'opis',
+    limited_number_of_redemptions =&gt; 1, expiration_dt =&gt; '2012-10-30',
+    is_single_use =&gt; True, rate =&gt; 100,
+    rate_type =&gt; keyword(percent), rate_currency_id =&gt; 'PLN',
+    charge_exclusion =&gt; keyword(all_onetime_charges), currency_restriction =&gt; 'PLN',
+    product_restriction =&gt; ref(-1)));
+</code></pre>
+
 <h3>Balance information - invoices and payments</h3>
 
 <pre><code>function BillinSession-&gt;list_customer_invoices($customer, $named_args = array())

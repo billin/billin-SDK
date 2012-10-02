@@ -317,6 +317,18 @@ The function verifies if a coupon code is valid. On success a coupon\_def is ret
 
 Redeem coupon code for a customer. The function causes API error if the coupon code is invalid or unusable (e.g. coupon use count or expiry date were reached). Null value is returned on error if $skip\_invalid\_coupon\_error is set to True.
 
+    function public function create_coupon($params)
+
+Create a discount coupon for specified params. Example:
+
+	$sess->search_products(array(id => 'CRM Basic - year'));
+	$sess->create_coupon(array(name => 'kupon', code_length => 20, descr => 'opis',
+		limited_number_of_redemptions => 1, expiration_dt => '2012-10-30',
+		is_single_use => True, rate => 100,
+		rate_type => keyword(percent), rate_currency_id => 'PLN',
+		charge_exclusion => keyword(all_onetime_charges), currency_restriction => 'PLN',
+		product_restriction => ref(-1)));
+
 ### Balance information - invoices and payments
 
     function BillinSession->list_customer_invoices($customer, $named_args = array())
