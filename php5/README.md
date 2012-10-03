@@ -1,4 +1,4 @@
-This is a draft of a manual for Billin PHP5 SDK - version 0.3
+This is a draft of a manual for Billin PHP5 SDK
 ================================================================================
 
 To get you started quickly have a look at a simple example contained in the [test-billin.php5](https://github.com/billin/billin-SDK/blob/master/php5/test-billin.php5) file. Each SDK method used in there is commented to let you know what is happening in every step.

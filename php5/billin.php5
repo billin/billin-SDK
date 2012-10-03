@@ -715,10 +715,10 @@ class BillinSession {
 
 
 	## payments
-	public function get_payu_pending_payment($customer = Null) 
+	public function get_payu_pending_payment($customer_or_invoice = Null) 
 	{
-		$customer = $this->default_object($customer);
-		return $this->call_api(get_pending_payment, array($customer, keyword(payu)));
+		$customer = $this->default_object($customer_or_invoice);
+		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(payu)));
 	}
 
 	### card payments
