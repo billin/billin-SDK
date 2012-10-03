@@ -606,6 +606,15 @@ class BillinSession {
 		return new BillinProductParams($product);
 	}
 
+	public function get_product_params_by_oid($oid, $customer = Null) 
+	{
+		$customer = $this->default_object($customer);
+		$this->stack_api(search, array(product_def), array(oid => $oid));
+		$this->stack_api(elt, array(0));
+		$this->stack_api(get_product_params, array(), array('parent' => $customer));
+		return new BillinProductParams($this->run_api_stack());
+	}
+
 	public function create_subscription($customer = Null, $subscription_args = array()) 
 	{
 		$customer = $this->default_object($customer);

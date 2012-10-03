@@ -260,7 +260,18 @@ external id and subsription status (as a keyword starting with a colon)
 
     function BillinSession->get_product_params($id, $customer = Null) 
 
-For a product that is identified by `$id` and will be assigned to `$customer`,
+For a product that is identified by `$id` to be assigned to `$customer`,
+returns an object for product configuration using the `configure_product`
+method
+
+Example:
+
+	$product = $sess->get_product_params('CRM Complete - month', $customer);
+
+- - -
+    function BillinSession->get_product_params_by_oid($oid, $customer = Null) 
+
+For a product that is identified by `$oid` to be assigned to `$customer`,
 returns an object for product configuration using the `configure_product`
 method
 

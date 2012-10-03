@@ -301,7 +301,21 @@ external id and subsription status (as a keyword starting with a colon)</p>
 <pre><code>function BillinSession-&gt;get_product_params($id, $customer = Null)
 </code></pre>
 
-<p>For a product that is identified by <code>$id</code> and will be assigned to <code>$customer</code>,
+<p>For a product that is identified by <code>$id</code> to be assigned to <code>$customer</code>,
+returns an object for product configuration using the <code>configure_product</code>
+method</p>
+
+<p>Example:</p>
+
+<pre><code>$product = $sess-&gt;get_product_params('CRM Complete - month', $customer);
+</code></pre>
+
+<hr>
+
+<pre><code>function BillinSession-&gt;get_product_params_by_oid($oid, $customer = Null)
+</code></pre>
+
+<p>For a product that is identified by <code>$oid</code> to be assigned to <code>$customer</code>,
 returns an object for product configuration using the <code>configure_product</code>
 method</p>
 
