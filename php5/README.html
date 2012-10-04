@@ -241,6 +241,21 @@ in the <a href="http://billin.pl/upload/billin_1.0/doc/create.html">create API c
 
 <hr>
 
+<pre><code>function BillinSession-&gt;modify_customer_billing_data($customer = Null, $args)
+</code></pre>
+
+<p>Modifies current customer billing data, retaining history of changes.</p>
+
+<p>Example use:</p>
+
+<pre><code>$sess = new BillinSession();
+$customer = $sess-&gt;find_customer(array(id =&gt; "32"));
+$sess-&gt;modify_customer_billing_data($customer, array(fname =&gt; "John"));
+$sess-&gt;commit();
+</code></pre>
+
+<hr>
+
 <pre><code>function BillinSession-&gt;create_customer($billing_data = Null, $customer_args = array())
 </code></pre>
 

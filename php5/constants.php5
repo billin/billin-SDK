@@ -114,4 +114,6 @@ define('type', 'type');
 define('user', 'user');
 define('xid', 'xid');
 define('zipcode', 'zipcode');
+define('value', 'value');
+define('modify', 'modify');
 ?>

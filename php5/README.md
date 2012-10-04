@@ -217,6 +217,18 @@ Example:
 
 
 - - -
+	function BillinSession->modify_customer_billing_data($customer = Null, $args) 
+
+Modifies current customer billing data, retaining history of changes.
+
+Example use:
+
+	$sess = new BillinSession();
+	$customer = $sess->find_customer(array(id => "32"));
+	$sess->modify_customer_billing_data($customer, array(fname => "John"));
+	$sess->commit();
+
+- - -
 	function BillinSession->create_customer($billing_data = Null, $customer_args = array())
 
 Creates and returns a customer with `$billing_data` specified or
