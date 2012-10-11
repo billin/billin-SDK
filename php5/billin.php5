@@ -13,8 +13,8 @@ if (!in_array('curl', get_loaded_extensions())) {
 }
 
 ## libs
-require 'config.php5';
-require 'constants.php5';
+require_once 'config.php5';
+require_once 'constants.php5';
 
 function identity($x)
 {
