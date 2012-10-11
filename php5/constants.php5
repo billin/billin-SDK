@@ -96,7 +96,6 @@ define('run_mode', 'run_mode');
 define('sale_id', 'sale_id');
 define('search', 'search');
 define('session', 'session');
-define('sid', 'sid');
 define('skip_activation_charge', 'skip_activation_charge');
 define('skip_billing', 'skip_billing');
 define('skip_invalid_coupon_error', 'skip_invalid_coupon_error');
