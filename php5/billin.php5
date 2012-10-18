@@ -5,7 +5,7 @@
 ###############################################################
 
 global $system, $user, $password, $api_key, $server, $prefix, 
-	$debug, $log_process, $log_facility, $api_version, $console_log;
+$debug, $log_process, $log_facility, $api_version, $console_log;
 
 ## requirement checks
 if (!in_array('curl', get_loaded_extensions())) {
@@ -378,8 +378,13 @@ class BillinSession {
 				$this->mlog($line);
 			}
 		}
-		$result = $code == 200 ? json_decode($result) : $result;
-		return array($result, $code);
+		if ($code == 200) {                                         // GZERO TODO Przeanalizować...
+			if($json_result = json_decode($result)) {
+				return array($json_result, $code);
+			} else {
+				return array($result, $code);
+			}
+		} 
 	}
 
 	function call_url($url, $post_args = array()) 
@@ -583,6 +588,21 @@ class BillinSession {
 		return $this->call_api(search, array(customer), $params);
 	}
 
+	public function search_invoices($params = array())
+	{ 
+		return $this->call_api(search, array(invoice), $params);
+	}
+
+	public function search_subscriptions($params = array())
+	{ 
+		return $this->call_api(search, array(subscription), $params);
+	}
+
+	public function search_coupon($params = array())
+	{ 
+		return $this->call_api(search, array(coupon_def), $params);
+	}
+
 	public function find_customer($params) {
 		$this->stack_api(search, array(customer), $params);
 		$this->stack_api(elt, array(0));
@@ -669,7 +689,7 @@ class BillinSession {
 	{
 		return $this->call_api(create, array(coupon_def), $params);
 	}
-	
+
 	public function check_coupon($code, $product = Null)
 	{
 		return $this->call_api(check_coupon, array($code), $product ? array(product => $product) : array());
@@ -679,7 +699,7 @@ class BillinSession {
 	{
 		$customer = $this->default_object($customer);
 		return $this->call_api(redeem_coupon, array($customer, $code), 
-					array(skip_invalid_coupon_error => $skip_invalid_coupon_error));
+		array(skip_invalid_coupon_error => $skip_invalid_coupon_error));
 	}
 
 	## balance details
@@ -721,6 +741,17 @@ class BillinSession {
 		$this->ch = init_curl();
 	}
 
+	public function get_document_image_raw($invoice = Null, $output_format = Null, $image_type = Null)
+	{
+		$invoice = $this->default_object($invoice);
+		$output_format = $output_format ? $output_format : keyword(pdf);
+		$image_type = $image_type ? $image_type : keyword(original);
+		$result = $this->call_api(get_document_image, array($invoice, $output_format), array(image_type => $image_type), array(), False);
+		curl_close($this->ch);
+		$this->ch = init_curl();
+		return $result;
+	}
+
 
 	## payments
 	public function get_payu_pending_payment($customer_or_invoice = Null) 
@@ -731,7 +762,7 @@ class BillinSession {
 
 	### card payments
 	public function authorize_card($customer, $issuer, $ccno, $cvv, $expy, $expm, $name, $email, $ip, $country, $city, 
-					$street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
+		$street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
 	{
 		global $pcp, $pcp_user, $pcp_pass;
 
@@ -749,29 +780,29 @@ class BillinSession {
 			$sale_id = $result->{'OK'}->{'id_sale_authorization'};
 			$fraud_score = $result->{'DATA'}->{'fraud_score'};
 			return $this->call_api(authorize_payment_method, array($customer, keyword('credit_card')),
-						array(sale_id => $sale_id, 
-						      successp => True,
-						      fraud_score => $fraud_score . '',
-						      issuer => keyword($issuer),
-						      ip => $ip,
-						      masked_number => mask_ccno($ccno),
-						      exp_year => intval($expy),
-						      exp_month => intval($expm)));
+				array(sale_id => $sale_id, 
+				successp => True,
+				fraud_score => $fraud_score . '',
+				issuer => keyword($issuer),
+				ip => $ip,
+				masked_number => mask_ccno($ccno),
+				exp_year => intval($expy),
+				exp_month => intval($expm)));
 
 		} else {
 			$result = json_decode($result);
 			if (property_exists($result, 'ERROR')) {
 				$e = $result->{'ERROR'};
 				return $this->call_api(authorize_payment_method, array($customer, keyword('credit_card')),
-						array(successp => False,
-						      ip => $ip,
-						      masked_number => mask_ccno($ccno),
-						      issuer => keyword($issuer),
-						      exp_year => intval($expy),
-						      exp_month => intval($expm),
-						      error_description => $e->{'error_description'}, 
-						      error_number => $e->{'error_number'}, 
-						      error_id => $e->{'id_error'}));
+					array(successp => False,
+					ip => $ip,
+					masked_number => mask_ccno($ccno),
+					issuer => keyword($issuer),
+					exp_year => intval($expy),
+					exp_month => intval($expm),
+					error_description => $e->{'error_description'}, 
+					error_number => $e->{'error_number'}, 
+					error_id => $e->{'id_error'}));
 			} else {
 				$this->mlog(array("Invalid PCP error message format" => $result));
 			}
