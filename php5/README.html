@@ -366,10 +366,10 @@ method</p>
 
 <hr>
 
-<pre><code>function BillinSession-&gt;assign_product($product, $subscription = Null, $product_args = array())
+<pre><code>function BillinSession-&gt;assign_product($product, $subscription_or_customer = Null, $product_args = array())
 </code></pre>
 
-<p>Assigns a configured product to a previously created <code>$subscription</code>. Arguments for product creation are described in the <a href="http://billin.pl/upload/billin_1.0/doc/assign_product.html">assign_product API call documentation</a></p>
+<p>Assigns a configured product to a previously created subscription or customer. When you assign a product to a customer, you must add customer_assignment=true to \$product_args. Arguments for product creation are described in the <a href="http://billin.pl/upload/billin_1.0/doc/assign_product.html">assign_product API call documentation</a></p>
 
 <p>Example:</p>
 

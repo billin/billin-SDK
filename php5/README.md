@@ -311,9 +311,9 @@ Example:
 	$subscription = $sess->create_subscription($customer);
 
 - - -
-	function BillinSession->assign_product($product, $subscription = Null, $product_args = array()) 
+	function BillinSession->assign_product($product, $subscription_or_customer = Null, $product_args = array()) 
 
-Assigns a configured product to a previously created `$subscription`. Arguments for product creation are described in the [assign\_product API call documentation](http://billin.pl/upload/billin_1.0/doc/assign\_product.html)
+Assigns a configured product to a previously created subscription or customer. When you assign a product to a customer, you must add customer\_assignment=true to \$product\_args. Arguments for product creation are described in the [assign\_product API call documentation](http://billin.pl/upload/billin_1.0/doc/assign\_product.html)
 
 Example:
 
