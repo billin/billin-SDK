@@ -115,4 +115,6 @@ define('xid', 'xid');
 define('zipcode', 'zipcode');
 define('value', 'value');
 define('modify', 'modify');
+define('format_document', 'format_document');
+define('desired_output_format', 'desired_output_format');
 ?>

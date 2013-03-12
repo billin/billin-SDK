@@ -722,6 +722,13 @@ class BillinSession {
 		return $this->call_api(list_data, array($customer, invoice), $named_args);
 	}
 
+	public function format_document($invoice = Null, $desired_output_format = Null)
+	{
+		$invoice = $this->default_object($invoice);
+		$desired_output_format = $desired_output_format ? $desired_output_format : keyword(html);
+		return $this->call_api(format_document, array($invoice), array(desired_output_format => $desired_output_format));
+	}
+
 	public function get_document_image($path, $invoice = Null, $output_format = Null, $image_type = Null)
 	{
 		$invoice = $this->default_object($invoice);
