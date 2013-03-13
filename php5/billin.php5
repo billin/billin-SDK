@@ -767,6 +767,18 @@ class BillinSession {
 		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(payu)));
 	}
 
+	public function search_payment_gateway($id = Null, $name = Null) 
+	{
+		$args = array();
+		if ($id) {
+			$args['id'] = $id;
+		}
+		if ($name) {
+			$args['name'] = $name;
+		}
+		return $this->call_api(search, array(payment_gateway), $args);
+	}
+
 	### card payments
 	public function authorize_card($customer, $issuer, $ccno, $cvv, $expy, $expm, $name, $email, $ip, $country, $city, 
 		$street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
