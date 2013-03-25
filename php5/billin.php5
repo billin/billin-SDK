@@ -378,13 +378,11 @@ class BillinSession {
 				$this->mlog($line);
 			}
 		}
-		if ($code == 200) {                                         // GZERO TODO Przeanalizować...
-			if($json_result = json_decode($result)) {
-				return array($json_result, $code);
-			} else {
-				return array($result, $code);
-			}
-		} 
+		if ($code == 200 && ($json_result = json_decode($result))) {
+			return array($json_result, $code);
+		}
+		return array($result, $code);
+
 	}
 
 	function call_url($url, $post_args = array()) 
