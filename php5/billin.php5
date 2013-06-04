@@ -720,6 +720,14 @@ class BillinSession {
 		return $this->call_api(list_data, array($customer, invoice), $named_args);
 	}
 
+	## subscription charge inst details
+	public function list_subscription_charge_details($subscription, $named_args = array())
+	{
+		$subscription = $this->default_object($subscription);
+		return $this->call_api(list_data, array($subscription, charge_discount_inst_detail), $named_args);
+	}
+
+
 	public function format_document($invoice = Null, $desired_output_format = Null)
 	{
 		$invoice = $this->default_object($invoice);

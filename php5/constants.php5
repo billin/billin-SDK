@@ -118,4 +118,5 @@ define('user', 'user');
 define('value', 'value');
 define('xid', 'xid');
 define('zipcode', 'zipcode');
+define('charge_discount_inst_detail', 'charge_discount_inst_detail');
 ?>
