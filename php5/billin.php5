@@ -721,7 +721,7 @@ class BillinSession {
 	}
 
 	## subscription charge inst details
-	public function list_subscription_charge_details($subscription, $named_args = array())
+	public function list_subscription_charge_discount_inst_detail($subscription, $named_args = array())
 	{
 		$subscription = $this->default_object($subscription);
 		return $this->call_api(list_data, array($subscription, charge_discount_inst_detail), $named_args);
