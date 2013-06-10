@@ -767,6 +767,12 @@ class BillinSession {
 		return $result;
 	}
 
+	## units
+	public function modify_unit_quantity($subscription, $unit, $quantity)
+	{
+		$subscription = $this->default_object($subscription);
+		return $this->call_api(modify_unit_quantity, array($subscription, $unit, $quantity));
+	}
 
 	## payments
 	public function get_payu_pending_payment($customer_or_invoice = Null) 

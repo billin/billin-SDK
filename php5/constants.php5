@@ -69,6 +69,7 @@ define('masked_number', 'masked_number');
 define('max', 'max');
 define('min', 'min');
 define('modify', 'modify');
+define('modify_unit_quantity', 'modify_unit_quantity');
 define('monetary', 'monetary');
 define('name', 'name');
 define('no_params_assign', 'no_params_assign');
