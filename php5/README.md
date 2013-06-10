@@ -258,9 +258,9 @@ Returns the first customer object matching search parameters (equivalent of
 elt(0) on the results of `search_customers`).
 
 - - -
-    function BillinSession->list_customer_subscriptions($customer = Null)
+    function BillinSession->list_customer_subscriptions($customer = Null, $parameters = array())
 
-Returns a list of all subscriptions in the system. The optional $customer parameter enables narrowing of the subscription list to the $customer's subscriptions.
+Returns a list of all subscriptions in the system. The optional $customer parameter enables narrowing of the subscription list to the $customer's subscriptions. You can specify additional filter expression using the paramters array. For full information refer the [API call documentation](http://billin.pl/upload/billin_1.0/doc/list_data.html).
 
 - - -
     function BillinSession->all_subscriptions_status() 
