@@ -378,10 +378,12 @@ class BillinSession {
 				$this->mlog($line);
 			}
 		}
-		if ($code == 200 && ($json_result = json_decode($result))) {
+		if ($code == 200) {
+			$json_result = json_decode($result);
 			return array($json_result, $code);
+		} else {
+			return array($result, $code);
 		}
-		return array($result, $code);
 
 	}
 
