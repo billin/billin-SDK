@@ -702,6 +702,13 @@ class BillinSession {
 		array(skip_invalid_coupon_error => $skip_invalid_coupon_error));
 	}
 
+	## generate invoice on demand
+	public function generate_invoice($customer_or_subscription = Null,$params) 
+	{
+		$customer_or_subscription = $this->default_object($customer_or_subscription);
+		return $this->call_api(generate_invoice, array($customer_or_subscription), $params);
+	}
+	
 	## balance details
 	public function list_customer_payments($customer = Null) 
 	{
