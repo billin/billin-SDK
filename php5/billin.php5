@@ -569,6 +569,12 @@ class BillinSession {
 		return $this->call_api(create, array(billing_data), $billing_data_args);
 	}
 
+	## adhoc calc
+	public function create_adhoc_calc($params) 
+	{
+		return $this->call_api(create, array(adhoc_calc), $params);
+	}
+	
 	public function modify_customer_billing_data($customer = Null, $args) 
 	{
 		$customer = $this->default_object($customer);
