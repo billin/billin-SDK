@@ -556,6 +556,13 @@ class BillinSession {
 		return $this->call_api(rollback);
 	}
 
+	public function logout() 
+	{
+		$this->calls = array();
+		return $this->call_api(logout);
+	}
+
+
 	## data utils
 	public function elt($n, $list = Null) 
 	{
