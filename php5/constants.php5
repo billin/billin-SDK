@@ -65,6 +65,7 @@ define('limited_number_of_redemptions', 'limited_number_of_redemptions');
 define('list_data', 'list_data');
 define('lname', 'lname');
 define('login', 'login');
+define('logout', 'logout');
 define('masked_number', 'masked_number');
 define('max', 'max');
 define('min', 'min');
