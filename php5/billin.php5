@@ -40,6 +40,14 @@ function second($arr)
 	return $arr[1];
 }
 
+function normalize_id($arr)
+{
+	if (array_key_exists('id', $arr)) {
+		$arr['id'] = (string)$arr['id'];
+	}
+	return $arr;
+}
+
 function map_list($fn, $arr) 
 {
 	$res = array();
@@ -592,6 +600,7 @@ class BillinSession {
 
 	public function search_customers($params = array())
 	{ 
+		$params = normalize_id($params);
 		return $this->call_api(search, array(customer), $params);
 	}
 
@@ -602,6 +611,7 @@ class BillinSession {
 
 	public function search_subscriptions($params = array())
 	{ 
+		$params = normalize_id($params);
 		return $this->call_api(search, array(subscription), $params);
 	}
 
@@ -611,6 +621,7 @@ class BillinSession {
 	}
 
 	public function find_customer($params) {
+		$params = normalize_id($params);
 		$this->stack_api(search, array(customer), $params);
 		$this->stack_api(elt, array(0));
 		return $this->run_api_stack();
