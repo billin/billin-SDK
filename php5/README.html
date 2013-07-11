@@ -450,10 +450,17 @@ list and are described in the <a href="http://billin.pl/upload/billin_1.0/doc/li
 
 <hr>
 
-<pre><code>function get_payu_pending_payment($customer = Null)
+<pre><code>function get_payu_pending_payment($customer_or_invoice = Null)
 </code></pre>
 
 <p>Returns pending payment information for PayU Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayU. The important fields of returned object are id and amount. </p>
+
+<hr>
+
+<pre><code>function get_paylane_pending_payment($customer_or_invoice = Null)
+</code></pre>
+
+<p>Returns pending payment information for PayLane Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayLane.</p>
 
 <h3>Invoice images</h3>
 

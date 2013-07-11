@@ -788,6 +788,12 @@ class BillinSession {
 		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(payu)));
 	}
 
+	public function get_paylane_pending_payment($customer_or_invoice = Null) 
+	{
+		$customer = $this->default_object($customer_or_invoice);
+		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(paylane)));
+	}
+
 	public function search_payment_gateway($id = Null, $name = Null) 
 	{
 		$args = array();

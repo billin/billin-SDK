@@ -377,9 +377,14 @@ Returns all `$customer` balance information - invoices and payments
 Change the amount of a registered unit for a subscription.
 
 - - -
-    function get_payu_pending_payment($customer = Null) 
+    function get_payu_pending_payment($customer_or_invoice = Null) 
 
 Returns pending payment information for PayU Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayU. The important fields of returned object are id and amount. 
+
+- - -
+    function get_paylane_pending_payment($customer_or_invoice = Null) 
+
+Returns pending payment information for PayLane Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayLane.
 
 ### Invoice images
 
