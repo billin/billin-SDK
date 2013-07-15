@@ -804,7 +804,7 @@ class BillinSession {
 		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(paylane)));
 	}
 
-	public function search_payment_gateway($id = Null, $name = Null) 
+	public function search_payment_gateway($id = Null, $name = Null, $method = Null, $currency_id = Null) 
 	{
 		$args = array();
 		if ($id) {
@@ -812,6 +812,12 @@ class BillinSession {
 		}
 		if ($name) {
 			$args['name'] = $name;
+		}
+		if ($method) {
+			$args['method'] = $method;
+		}
+		if ($currency_id) {
+			$args['currency_id'] = $currency_id;
 		}
 		return $this->call_api(search, array(payment_gateway), $args);
 	}
