@@ -82,6 +82,7 @@ define('override_trial_duration_days', 'override_trial_duration_days');
 define('params', 'params');
 define('parent', 'parent');
 define('pass', 'pass');
+define('paylane', 'paylane');
 define('payment', 'payment');
 define('payment_due_days', 'payment_due_days');
 define('payment_gateway', 'payment_gateway');
