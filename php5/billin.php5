@@ -733,7 +733,8 @@ class BillinSession {
 
 	public function list_products() 
 	{
-		return map(get_attrs(id, name, descr), $this->call_api(search, array(product_def)));
+		# return map(get_attrs(id, name, descr), $this->call_api(search, array(product_def)));
+		return $this->call_api(search, array(product_def));
 	}
 
 	public function search_products($params)
