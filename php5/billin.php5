@@ -84,6 +84,7 @@ function api_quote($val, $key = Null)
 	# var_dump($val);
 	# print "key:\n";
 	# var_dump($key);
+
 	if (is_string($val)) {
 		if (defined($val)) {
 			## constant
@@ -108,6 +109,8 @@ function api_quote($val, $key = Null)
 	} else {
 		$res = $val;
 	}
+
+	# print "res: $res\n";
 
 	if ($key) {
 		return $key . '=' . $res;
@@ -841,13 +844,13 @@ class BillinSession {
 	public function get_payu_pending_payment($customer_or_invoice = Null) 
 	{
 		$customer = $this->default_object($customer_or_invoice);
-		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(payu)));
+		return $this->call_api(get_pending_payment, array($customer, keyword(payu)));
 	}
 
 	public function get_paylane_pending_payment($customer_or_invoice = Null) 
 	{
 		$customer = $this->default_object($customer_or_invoice);
-		return $this->call_api(get_pending_payment, array($customer_or_invoice, keyword(paylane)));
+		return $this->call_api(get_pending_payment, array($customer, keyword(paylane)));
 	}
 
 	public function search_payment_gateway($id = Null, $name = Null, $method = Null, $currency_id = Null) 
