@@ -95,6 +95,10 @@ function api_quote($val, $key = Null)
 		$res = '@' . $val->pos;
 	} elseif (is_amount($val)) {
 		$res = $val->value;
+	} elseif (is_billinString($val)) {
+		$res = '"' . $val->value . '"';
+	} elseif (is_symbol($val)) {
+		$res = $val->value;
 	} elseif (is_keyword($val)) {
 		$res = $val->value;
 	} elseif ($val === True) {
@@ -186,6 +190,48 @@ function keyword($val)
 function is_keyword($val) 
 {
 	return gettype($val) == 'object' and get_class($val) == 'BillinKeyword';
+}
+
+class BillinSymbol {
+	public $value;
+	function __construct($value) 
+	{
+		if (!is_string($value)) {
+			die('Use strings for symbols');
+		}
+		$this->value = $value;
+	}
+}
+
+function symbol($val) 
+{
+	return new BillinSymbol($val);
+}
+
+function is_symbol($val) 
+{
+	return gettype($val) == 'object' and get_class($val) == 'BillinSymbol';
+}
+
+class BillinString {
+	public $value;
+	function __construct($value) 
+	{
+		if (!is_string($value)) {
+			die('Use strings for BillinStrings');
+		}
+		$this->value = $value;
+	}
+}
+
+function string($val) 
+{
+	return new BillinString($val);
+}
+
+function is_billinString($val) 
+{
+	return gettype($val) == 'object' and get_class($val) == 'BillinString';
 }
 
 function rm_vars($locals, $to_rm)

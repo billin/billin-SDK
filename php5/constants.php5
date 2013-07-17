@@ -86,7 +86,6 @@ define('payment', 'payment');
 define('payment_due_days', 'payment_due_days');
 define('payment_gateway', 'payment_gateway');
 define('payu', 'payu');
-define('paylane', 'paylane');
 define('pdf', 'pdf');
 define('percent', 'percent');
 define('period', 'period');
