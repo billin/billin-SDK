@@ -28,15 +28,4 @@ $debug = True;
 $console_log = True;
 $log_facility = LOG_LOCAL0;
 $log_process = "billin";
-
-
-    # system credentials
-    $user = 'demo'; 
-    $password = 'DiershOp0';
-    $api_key = Null;
-    # end-point configuration
-    $server = 'https://a.billin.pl/';
-    $prefix = 'demo-6f92/API/'; 
-    $system = 'prod';
-    $api_version = 'v1';
 ?>
