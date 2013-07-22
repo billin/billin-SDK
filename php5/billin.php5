@@ -876,7 +876,7 @@ class BillinSession {
 	{
 		$customer = $this->default_object($customer);
 		return $this->call_api(authorize_payment_method, 
-					array(keyword('credit-card')), 
+					array($customer, keyword('credit-card')), 
 					array(sale_id => $sale_id, masked_number => $masked_number,
 						exp_year => $expy, exp_month => $expm));
 	}
