@@ -872,5 +872,13 @@ class BillinSession {
 		return $this->call_api(search, array(payment_gateway), $args);
 	}
 
+	public function authorize_card($customer = Null, $sale_id = Null, $expy = Null, $expm = Null, $masked_number = Null)
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(authorize_payment_method, 
+					array(keyword('credit-card')), 
+					array(sale_id => $sale_id, masked_number => $masked_number,
+						exp_year => $expy, exp_month => $expm));
+	}
 }
 ?>
