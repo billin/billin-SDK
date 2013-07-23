@@ -127,4 +127,6 @@ define('user', 'user');
 define('value', 'value');
 define('xid', 'xid');
 define('zipcode', 'zipcode');
+define('charge_payment_method', 'charge_payment_method');
+define('remove_payment_method', 'remove_payment_method');
 ?>

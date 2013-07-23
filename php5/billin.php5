@@ -880,5 +880,18 @@ class BillinSession {
 					array(sale_id => $sale_id, masked_number => $masked_number,
 						exp_year => $expy, exp_month => $expm));
 	}
+
+	public function charge_payment_method($customer = Null)
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(charge_payment_method, array($customer));
+	}
+
+	public function remove_payment_method($customer = Null)
+
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(remove_payment_method, array($customer));
+	}
 }
 ?>
