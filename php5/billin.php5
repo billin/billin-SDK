@@ -872,53 +872,26 @@ class BillinSession {
 		return $this->call_api(search, array(payment_gateway), $args);
 	}
 
-	### card payments
-	public function authorize_card($customer, $issuer, $ccno, $cvv, $expy, $expm, $name, $email, $ip, $country, $city, 
-		$street, $zipcode, $currency, $descr = 'Test authorisation', $amount = '1.00')
+	public function authorize_card($customer = Null, $sale_id = Null, $expy = Null, $expm = Null, $masked_number = Null)
 	{
-		global $pcp, $pcp_user, $pcp_pass;
-
 		$customer = $this->default_object($customer);
-		if (!$this->pcp_ch) {
-			$this->pcp_ch = init_curl($pcp_user, $pcp_pass);
-		}
-		$fields = post_fields(array( ccno => $ccno, cvv => $cvv,
-			expy => $expy, expm => str_pad($expm . '', 2, '0', STR_PAD_LEFT), name => $name, email => $email, 
-			ip => $ip, country => $country, city => $city, street => $street,
-			zipcode => $zipcode, currency => $currency, amount => $amount, descr => $descr));
-		$this->mlog(array('user' => $pcp_user, 'pass' => $pcp_pass));
-		list($result, $code) = $this->curl_call($this->pcp_ch, $pcp . "auth", $fields);
-		if ($code == 200) {
-			$sale_id = $result->{'OK'}->{'id_sale_authorization'};
-			$fraud_score = $result->{'DATA'}->{'fraud_score'};
-			return $this->call_api(authorize_payment_method, array($customer, keyword('credit_card')),
-				array(sale_id => $sale_id, 
-				successp => True,
-				fraud_score => $fraud_score . '',
-				issuer => keyword($issuer),
-				ip => $ip,
-				masked_number => mask_ccno($ccno),
-				exp_year => intval($expy),
-				exp_month => intval($expm)));
+		return $this->call_api(authorize_payment_method, 
+					array($customer, keyword('credit-card')), 
+					array(sale_id => $sale_id, masked_number => $masked_number,
+						exp_year => $expy, exp_month => $expm));
+	}
 
-		} else {
-			$result = json_decode($result);
-			if (property_exists($result, 'ERROR')) {
-				$e = $result->{'ERROR'};
-				return $this->call_api(authorize_payment_method, array($customer, keyword('credit_card')),
-					array(successp => False,
-					ip => $ip,
-					masked_number => mask_ccno($ccno),
-					issuer => keyword($issuer),
-					exp_year => intval($expy),
-					exp_month => intval($expm),
-					error_description => $e->{'error_description'}, 
-					error_number => $e->{'error_number'}, 
-					error_id => $e->{'id_error'}));
-			} else {
-				$this->mlog(array("Invalid PCP error message format" => $result));
-			}
-		}
+	public function charge_payment_method($customer = Null)
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(charge_payment_method, array($customer));
+	}
+
+	public function remove_payment_method($customer = Null)
+
+	{
+		$customer = $this->default_object($customer);
+		return $this->call_api(remove_payment_method, array($customer));
 	}
 
 	## paypal payments
