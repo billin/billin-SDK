@@ -384,6 +384,11 @@ Returns pending payment information for PayU Internet payment services provider.
 - - -
     function get_paylane_pending_payment($customer_or_invoice = Null) 
 
+Returns pending payment information for PayLane Internet payment services provider via PayPal payment gateway. The data returned allow you to populate an HTML transaction form to invoke online payment with PayPal.
+
+- - -
+    function get_paylane_paypal_pending_payment($customer_or_invoice = Null) 
+
 Returns pending payment information for PayLane Internet payment services provider. The data returned allow you to populate an HTML transaction form to invoke online payment with PayLane.
 
 ### Invoice images

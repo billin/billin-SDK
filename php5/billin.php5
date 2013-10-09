@@ -920,5 +920,12 @@ class BillinSession {
 			}
 		}
 	}
+
+	## paypal payments
+	public function get_paylane_paypal_pending_payment($customer_or_invoice = Null)
+	{
+		$customer = $this->default_object($customer_or_invoice);
+		return $this->call_api(get_pending_payment, array($customer, keyword(paylane_paypal)));
+	}
 }
 ?>
