@@ -355,6 +355,7 @@ function init_curl($user = Null, $pass = Null)
 	# basic cURL config
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $secure ? True : False);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
 	# cURL auth config
 	if ($user and $pass) {
@@ -467,7 +468,7 @@ class BillinSession {
 			} elseif ($code == 501 or $code == 502) {
 				throw new BillinInvalidSessionException($url, $code, $result);
 			} elseif ($code == 0) {
-				throw new BillinRuntimeException("Connection refused or certificate validation failed for $url\n"); 
+				throw new BillinRuntimeException("Connection refused, timed out or certificate validation failed for $url\n"); 
 			} else {
 				throw new BillinAPIException($url, $code, $result);
 			}
