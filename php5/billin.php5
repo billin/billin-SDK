@@ -277,7 +277,7 @@ class BillinProductParams {
 				} else {
 					if ($child->{type} == ':charging_plan') {
 						if ($value < $child->{cardinality}->{min} or $value > $child->{cardinality}->{max}) {
-							die("Assignment count outside of cardinality bounds");
+							throw new BillinRuntimeException("Assignment count outside of cardinality bounds");
 						}
 					}
 					$this->changes[$child->{xid}] = $value;
@@ -285,7 +285,7 @@ class BillinProductParams {
 			}
 		}
 		if (!$updated) {
-			die("Unable to find property $name to update");
+			throw new BillinRuntimeException("Unable to find property $name to update");
 		}
 	}
 
@@ -294,6 +294,15 @@ class BillinProductParams {
 		$nlist = mb_split('!', $name);
 		$this->update_property_list($this->json, $nlist, $value);
 	}
+}
+
+class BillinRuntimeException extends Exception {
+	public $descr;
+
+	function __construct($descr) {
+		$this->descr = $descr;
+	}
+
 }
 
 class BillinPCPException extends Exception {
@@ -399,7 +408,7 @@ class BillinSession {
 			} elseif (is_string($x)) {
 				$msg = "$x\n";
 			} else {
-				die("Cannot mlog value of type " . gettype($x) . "\n");
+				throw new BillinRuntimeException("Cannot mlog value of type " . gettype($x) . "\n");
 			}
 
 			if ($msg) {
@@ -456,7 +465,7 @@ class BillinSession {
 			} elseif ($code == 501 or $code == 502) {
 				throw new BillinInvalidSessionException($url, $code, $result);
 			} elseif ($code == 0) {
-				die("Connection refused or certificate validation failed for $url\n"); 
+				throw new BillinRuntimeException("Connection refused or certificate validation failed for $url\n"); 
 			} else {
 				throw new BillinAPIException($url, $code, $result);
 			}
