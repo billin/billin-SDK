@@ -296,27 +296,29 @@ class BillinProductParams {
 	}
 }
 
-class BillinRuntimeException extends Exception {
-	public $descr;
+class BillinException extends Exception {
+	public $message;
 
-	function __construct($descr) {
-		$this->descr = $descr;
+	function __construct($message) {
+		$this->message = $message;
 	}
-
 }
 
-class BillinPCPException extends Exception {
-	public $descr;
+class BillinRuntimeException extends BillinException {
+}
+
+class BillinPCPException extends BillinException {
+	public $message;
 	public $number;
 	public $id_error;
 
-	function __construct($descr, $number, $id_error) {
-		list($this->descr, $this->number, $this->id_error) =
-			array($descr, $number, $id_error);
+	function __construct($message, $number, $id_error) {
+		list($this->message, $this->number, $this->id_error) =
+			array($message, $number, $id_error);
 	}
 }
 
-class BillinAPIException extends Exception {
+class BillinAPIException extends BillinException {
 	public $url;
 	public $code;
 	public $response;
@@ -910,4 +912,5 @@ class BillinSession {
 		return $this->call_api(get_pending_payment, array($customer, keyword(paylane_paypal)));
 	}
 }
+
 ?>
