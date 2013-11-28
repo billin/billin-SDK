@@ -297,8 +297,6 @@ class BillinProductParams {
 }
 
 class BillinException extends Exception {
-	public $message;
-
 	function __construct($message) {
 		$this->message = $message;
 	}
@@ -308,7 +306,6 @@ class BillinRuntimeException extends BillinException {
 }
 
 class BillinPCPException extends BillinException {
-	public $message;
 	public $number;
 	public $id_error;
 
@@ -320,7 +317,6 @@ class BillinPCPException extends BillinException {
 
 class BillinAPIException extends BillinException {
 	public $url;
-	public $code;
 	public $response;
 
 	function __construct($url, $code, $response) 
