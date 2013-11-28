@@ -443,8 +443,12 @@ class BillinSession {
 				$this->mlog($line);
 			}
 		}
-		if ($code == 200 && (($json_result = json_decode($result)) !== NULL)) {
-			return array($json_result, $code);
+		if ($code == 200) {
+			if ($result != 'null') {
+				return array(json_decode($result), $code);
+			} else {
+				return array(NULL, $code);
+			}
 		} else {
 			return array($result, $code);
 		}
@@ -884,9 +888,9 @@ class BillinSession {
 	{
 		$customer = $this->default_object($customer);
 		return $this->call_api(authorize_payment_method, 
-					array($customer, keyword('credit-card')), 
-					array(sale_id => $sale_id, masked_number => $masked_number,
-						exp_year => $expy, exp_month => $expm));
+			array($customer, keyword('credit-card')), 
+			array(sale_id => $sale_id, masked_number => $masked_number,
+			exp_year => $expy, exp_month => $expm));
 	}
 
 	public function charge_payment_method($customer = Null)
