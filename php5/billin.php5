@@ -727,6 +727,22 @@ class BillinSession {
 		return $this->call_api(create, array(subscription), $subscription_args+array(parent => $customer));
 	}
 
+	public function modify_subscription($subscription, $args)
+	{
+		$subscription = $this->default_object($subscription);
+		return $this->call_api(modify, array($subscription), $args);
+	}
+
+	public function cancel_subscription($subscription, $cancel_dt = Null)
+	{
+		$subscription = $this->default_object($subscription);
+		if ($cancel_dt) {
+			return $this->call_api(cancel, array($subscription), array(cancel_dt => $cancel_dt));
+		} else {
+			return $this->call_api(cancel, array($subscription));
+		}
+	}
+
 	public function assign_product($product, $subscription = Null, $product_args = array()) 
 	{
 		$subscription = $this->default_object($subscription);
