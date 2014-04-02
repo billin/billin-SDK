@@ -112,7 +112,7 @@ function api_quote($val, $key = Null)
 
 	# print "res: $res\n";
 
-	if ($key) {
+	if ($key || ($key === 0)) {
 		return $key . '=' . $res;
 	} else {
 		return $res;
