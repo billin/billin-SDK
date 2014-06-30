@@ -647,7 +647,7 @@ class BillinSession {
 	public function modify_customer_billing_data($customer = Null, $args) 
 	{
 		$customer = $this->default_object($customer);
-		$this->stack_api(value, array($customer), array(billing_data));
+		$this->stack_api(value, array($customer,billing_data));
 		$this->stack_api(modify, array(), $args);
 		return $this->run_api_stack();
 	}
